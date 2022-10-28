@@ -9,4 +9,66 @@
   <p>
     View the other customers that have chosen to fly with Orcas Air.
   </p>
+
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Address</th>
+        <th scope="col">Phone Number</th>
+        <th scope="col">Flight</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">John</th>
+        <td>Smith</td>
+        <td>1234 Holden Ave SW, Seattle WA 98425</td>
+        <td>206-333-555</td>
+        <td>SEA -> PDX 2022/04/22</td>
+      </tr>
+      <tr>
+        <th scope="row">James</th>
+        <td>Polk</td>
+        <td>80 Raging River Way, Detroit MI 48126</td>
+        <td>313-918-5486</td>
+        <td>SEA -> PDX 2022/04/22</td>
+      </tr>
+      <tr>
+        <th scope="row">Laura</th>
+        <td>Croft</td>
+        <td>640 Rainer Ave SW, Belevue WA 98248</td>
+        <td>206-444-1288</td>
+        <td>SEA -> PDX 2022/04/22</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <form>
+    <div class="form-group">
+      <label for="firstNameInput">First Name</label>
+      <input type="datetime" class="form-control" id="firstNameInput" placeholder="Enter First Name">
+    </div>
+    <div class="form-group">
+      <label for="lastNameInput">Last Name</label>
+      <input type="datetime" class="form-control" id="lastNameInput" placeholder="Enter Last Name">
+    </div>
+    <div class="form-group">
+      <label for="addressInput">Address</label>
+      <input type="text" class="form-control" id="addressInput" placeholder="Enter Address">
+    </div>
+    <div class="form-group">
+      <label for="phoneNumberInput">Phone Number</label>
+      <input type="phone" class="form-control" id="phoneNumberInput" placeholder="Enter Phone Number">
+    </div>
+    <div class="form-group">
+      <label for="flightInput">Flight</label>
+      <select class="form-control" id="flightInput">
+        <option>SEA -> PDX 2022/04/22</option>
+      </select> 
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
 {% endblock %}

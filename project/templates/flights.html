@@ -21,6 +21,7 @@
         <th scope="col">Pilot</th>
         <th scope="col">Copilot</th>
         <th scope="col">Aircraft</th>
+        <th scope="col">Customers</th>
       </tr>
     </thead>
     <tbody>
@@ -33,6 +34,11 @@
         <td>Steve Morton</td>
         <td>John Woodward</td>
         <td>NB3RF</td>
+        <td>
+          John Smith,
+          James Polk,
+          Laura Croft
+        </td>
       </tr>
     </tbody>
   </table>
@@ -82,6 +88,14 @@
       <label for="aircraftInput">Aircraft</label>
       <select class="form-control" id="aircraftInput">
         <option>NB3RF</option>
+      </select> 
+    </div>
+    <div class="form-group">
+      <label for="customerInput">Customer</label>
+      <select class="form-control" id="customerInput">
+        <option>John Smith</option>
+        <option>James Polk</option>
+        <option>Laura Croft</option>
       </select> 
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
