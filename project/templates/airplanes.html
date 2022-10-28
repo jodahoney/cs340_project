@@ -7,6 +7,70 @@
 {% block content %}
 
   <p>
-    Airplanes that are in the Orcas Air fleet.
+    Browse and add to airplanes that are in the Orcas Air fleet.
   </p>
+
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">TailNumber</th>
+        <th scope="col">Make</th>
+        <th scope="col">Model</th>
+        <th scope="col">Range</th>
+        <th scope="col">FuelCapacity</th>
+        <th scope="col">LastMaintenancePerformed</th>
+        <th scope="col">MaintenanceFrequency</th>
+        <th scope="col">NextMainenanceDate</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">NB3RF</th>
+        <td>Boeing</td>
+        <td>717</td>
+        <td>2371</td>
+        <td>3673</td>
+        <td>2022-01-23</td>
+        <td>365</td>
+        <td>2023-01-23</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <form>
+    <div class="form-group">
+      <label for="tailNumberInput">Tail Number</label>
+      <input type="text" class="form-control" id="tailNumberInput" placeholder="Enter Tail Number">
+    </div>
+    <div class="form-group">
+      <label for="makeInput">Make</label>
+      <input type="text" class="form-control" id="makeInput" placeholder="Enter airplane make">
+    </div>
+    <div class="form-group">
+      <label for="modelInput">Model</label>
+      <input type="text" class="form-control" id="modelInput" placeholder="Enter airplane model">
+    </div>
+    <div class="form-group">
+      <label for="rangeInput">Range</label>
+      <input type="number" class="form-control" id="rangeInput" placeholder="Enter airplane range">
+    </div>
+    <div class="form-group">
+      <label for="feulCapacityInput">Fuel Capacity</label>
+      <input type="number" class="form-control" id="feulCapacityInput" placeholder="Enter Fuel Capacity">
+    </div>
+    <div class="form-group">
+      <label for="lastMaintenancePerformedInput">Last Maintenance Performed</label>
+      <input type="date" class="form-control" id="lastMaintenancePerformedInput" placeholder="Enter Last Maintenance Performed">
+    </div>
+    <div class="form-group">
+      <label for="maintenancePerformedInput">Maintenance Frequency</label>
+      <input type="text" class="form-control" id="maintenancePerformedInput" placeholder="Enter Maintenance Frequency">
+    </div>
+    <div class="form-group">
+      <label for="nextMaintenanceDateInput">Next Maintenance Date</label>
+      <input type="date" class="form-control" id="nextMaintenanceDateInput" placeholder="Enter Next Maintenance Date">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  
 {% endblock %}
