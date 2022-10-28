@@ -1,0 +1,22 @@
+<!doctype html>
+<title>{% block title %}{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<nav>
+  <h1>Orcas Air</h1>
+  <ul>
+    <li><a href="{{ url_for('airports') }}">Airports</a></li>
+    <li><a href="{{ url_for('airplanes') }}">Airplanes</a></li>
+    <li><a href="{{ url_for('flights') }}">Flights</a></li>
+    <li><a href="{{ url_for('pilots') }}">Pilots</a></li>
+    <li><a href="{{ url_for('customers') }}">Customers</a></li>
+  </ul>
+</nav>
+<section class="content">
+  <header>
+    {% block header %}{% endblock %}
+  </header>
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  {% block content %}{% endblock %}
+</section>
