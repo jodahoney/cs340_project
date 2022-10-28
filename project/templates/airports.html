@@ -9,4 +9,44 @@
   <p>
     Browse airports where Orcas Air provides service.
   </p>
+
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">AirportID</th>
+        <th scope="col">Name</th>
+        <th scope="col">City</th>
+        <th scope="col">State</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">SEA</th>
+        <td>Seattle-Tacoma International Airport</td>
+        <td>Seattle</td>
+        <td>Washington</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <form>
+    <div class="form-group">
+      <label for="airportIDInput">Airport ID</label>
+      <input type="text" class="form-control" id="airportIDInput" placeholder="Enter Airport ID">
+    </div>
+    <div class="form-group">
+      <label for="nameInput">Airport Name</label>
+      <input type="text" class="form-control" id="nameInput" placeholder="Enter Name">
+    </div>
+    <div class="form-group">
+      <label for="cityInput">City</label>
+      <input type="text" class="form-control" id="cityInput" placeholder="Enter City">
+    </div>
+    <div class="form-group">
+      <label for="stateInput">State</label>
+      <input type="number" class="form-control" id="stateInput" placeholder="Enter State">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
 {% endblock %}
