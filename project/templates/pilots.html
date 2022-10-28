@@ -9,4 +9,81 @@
   <p>
     Browse the pilots that are a part of the Orcas Air fleet.
   </p>
+
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Origin</th>
+        <th scope="col">Destination</th>
+        <th scope="col">Departure</th>
+        <th scope="col">Arrival</th>
+        <th scope="col">FlightDuration</th>
+        <th scope="col">Pilot</th>
+        <th scope="col">Copilot</th>
+        <th scope="col">Aircraft</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">SEA</th>
+        <td>PDX</td>
+        <td>2022/04/22 21:50:25</td>
+        <td>2022/04/22 22:50:25</td>
+        <td>60</td>
+        <td>Steve Morton</td>
+        <td>John Woodward</td>
+        <td>NB3RF</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <form>
+    <div class="form-group">
+      <label for="originInput">Origin</label>
+      <select class="form-control" id="originInput">
+        <option>Seattle-Tacoma International Airport</option>
+        <option>Portland International Airport</option>
+      </select> 
+    </div>
+    <div class="form-group">
+      <label for="destinationInput">Destination</label>
+      <select class="form-control" id="destinationInput">
+        <option>Seattle-Tacoma International Airport</option>
+        <option>Portland International Airport</option>
+      </select> 
+    </div>
+    <div class="form-group">
+      <label for="departureInput">Departure</label>
+      <input type="datetime" class="form-control" id="departureInput" placeholder="Enter Departure">
+    </div>
+    <div class="form-group">
+      <label for="arrivalInput">Arrival</label>
+      <input type="datetime" class="form-control" id="arrivalInput" placeholder="Enter Arrival">
+    </div>
+    <div class="form-group">
+      <label for="flightDurationInput">Flight Duration</label>
+      <input type="number" class="form-control" id="flightDurationInput" placeholder="Enter Flight Duration">
+    </div>
+    <div class="form-group">
+      <label for="pilotInput">Pilot</label>
+      <select class="form-control" id="pilotInput">
+        <option>Steve Morton</option>
+        <option>John Woodward</option>
+      </select> 
+    </div>
+    <div class="form-group">
+      <label for="copilotInput">CoPilot</label>
+      <select class="form-control" id="copilotInput">
+        <option>Steve Morton</option>
+        <option>John Woodward</option>
+      </select> 
+    </div>
+    <div class="form-group">
+      <label for="aircraftInput">Aircraft</label>
+      <select class="form-control" id="aircraftInput">
+        <option>NB3RF</option>
+      </select> 
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
 {% endblock %}
