@@ -16,6 +16,9 @@
         <th scope="col">First Name</th>
         <th scope="col">Last Name</th>
         <th scope="col">Address</th>
+        <th scope="col">City</th>
+        <th scope="col">State</th>
+        <th scope="col">ZIP Code</th>
         <th scope="col">Phone Number</th>
         <th scope="col">Flight</th>
         <th scope="col">Edit|Delete</th>
@@ -25,7 +28,10 @@
       <tr>
         <th scope="row">John</th>
         <td>Smith</td>
-        <td>1234 Holden Ave SW, Seattle WA 98425</td>
+        <td>1234 Holden Ave SW</td>
+        <td>Seattle</td>
+        <td>WA</td>
+        <td>98425</td>
         <td>206-333-555</td>
         <td>SEA -> PDX 2022/04/22</td>
         <td>
@@ -37,7 +43,10 @@
       <tr>
         <th scope="row">James</th>
         <td>Polk</td>
-        <td>80 Raging River Way, Detroit MI 48126</td>
+        <td>80 Raging River Way</td>
+        <td>Detroit</td>
+        <td>MI</td>
+        <td>48126</td>
         <td>313-918-5486</td>
         <td>SEA -> PDX 2022/04/22</td>
         <td>
@@ -49,7 +58,10 @@
       <tr>
         <th scope="row">Laura</th>
         <td>Croft</td>
-        <td>640 Rainer Ave SW, Belevue WA 98248</td>
+        <td>640 Rainer Ave SW</td>
+        <td>Belevue</td>
+        <td>WA</td>
+        <td>98248</td>
         <td>206-444-1288</td>
         <td>SEA -> PDX 2022/04/22</td>
         <td>
@@ -71,7 +83,19 @@
       <input type="datetime" class="form-control" id="lastNameInput" placeholder="Enter Last Name">
     </div>
     <div class="form-group">
-      <label for="addressInput">Address</label>
+      <label for="addressInput">Address Line 1</label>
+      <input type="text" class="form-control" id="addressInput" placeholder="Enter Address">
+    </div>
+    <div class="form-group">
+      <label for="addressInput">City</label>
+      <input type="text" class="form-control" id="addressInput" placeholder="Enter Address">
+    </div>
+    <div class="form-group">
+      <label for="addressInput">State</label>
+      <input type="text" class="form-control" id="addressInput" placeholder="Enter Address">
+    </div>
+    <div class="form-group">
+      <label for="addressInput">ZIP Code</label>
       <input type="text" class="form-control" id="addressInput" placeholder="Enter Address">
     </div>
     <div class="form-group">
