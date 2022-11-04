@@ -8,15 +8,9 @@ app.config['MYSQL_PASSWORD'] = '2584' #last 4 of onid
 app.config['MYSQL_DB'] = 'cs340_dehoneyj'
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 
-
-
 @app.route('/')
 def index():
     return render_template('index.html')
-
-@app.route('/hello')
-def hello():
-    return 'Hello, World'
 
 # Airports
 @app.route('/airports')
@@ -42,6 +36,11 @@ def pilots():
 @app.route('/customers')
 def customers():
     return render_template('customers.html')
+
+# Flights_has_customers
+@app.route('/flights-customers')
+def flightsCustomers():
+    return render_template('flights_has_customers.html')
 
 
 # Listener

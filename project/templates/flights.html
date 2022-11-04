@@ -10,6 +10,17 @@
     Flights that are available from Orcas Air.
   </p>
 
+  <h3>Search for flights by destination:</h3>
+
+  <table class="table">
+    <select class="form-select">
+      <option selected></option>
+      <option value="PDX">Portland</option>
+      <option value="SEA">Seattle</option>
+    </select>
+  </table>
+
+
   <table class="table">
     <thead class="thead-dark">
       <tr>
@@ -22,6 +33,7 @@
         <th scope="col">Copilot</th>
         <th scope="col">Aircraft</th>
         <th scope="col">Customers</th>
+        <th scope="col">Edit|Delete</th>
       </tr>
     </thead>
     <tbody>
@@ -38,6 +50,11 @@
           John Smith,
           James Polk,
           Laura Croft
+        </td>
+        <td>
+          <i class="fa-solid fa-pen-to-square"></i>
+          |
+          <i class="fa-solid fa-delete-left"></i>
         </td>
       </tr>
     </tbody>
@@ -90,13 +107,28 @@
         <option>NB3RF</option>
       </select> 
     </div>
+  
     <div class="form-group">
-      <label for="customerInput">Customer</label>
-      <select class="form-control" id="customerInput">
-        <option>John Smith</option>
-        <option>James Polk</option>
-        <option>Laura Croft</option>
-      </select> 
+      <label for="customerAdd">Add Customers:</label>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          John Smith
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="2" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          James Polk
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="3" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          Laura Croft
+        </label>
+      </div>
+      
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
