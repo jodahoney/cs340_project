@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `Airplanes` (
   `FuelCapacity` INT NOT NULL,
   `LastMaintenancePerformed` DATE NOT NULL,
   `MaintenanceFrequency` INT NOT NULL,
-  `NextMaintenanceDate` DATE GENERATED ALWAYS AS (LastMaintenancePerformed+MaintenanceFrequency) VIRTUAL,
+  `NextMaintenanceDate` DATE  NOT NULL,
   PRIMARY KEY (`TailNumber`),
   UNIQUE INDEX `TailNumber_UNIQUE` (`TailNumber` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -150,11 +150,15 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Data for table `Airplanes`
 -- -----------------------------------------------------
-INSERT INTO `Airplanes` (`TailNumber`, `Make`, `Model`, `Range`, `FuelCapacity`, `LastMaintenancePerformed`, `MaintenanceFrequency`) 
-	VALUES ('N83RF', 'Boeing', '717', 2371, 3673, '2022-01-23', 365),
-	('N163NU', 'Bombardier', 'Q400', 1268, 835, '2022-10-01', 180),
-	('N76901', 'Airbus', 'A320', 5740, 7185, '2022-09-01', 90),
-	('N314T', 'Boeing', '737', 3000, 6878, '2022-09-30', 90);
+INSERT INTO `Airplanes` (`TailNumber`, `Make`, `Model`, `Range`, `FuelCapacity`, `LastMaintenancePerformed`, `MaintenanceFrequency`, `NextMaintenanceDate`) 
+	VALUES ('N83RF', 'Boeing', '717', 2371, 3673, '2022-01-23', 365, 
+  (SELECT DATE_ADD('2022-01-23', INTERVAL 365 DAY))),
+	('N163NU', 'Bombardier', 'Q400', 1268, 835, '2022-10-01', 180,
+  (SELECT DATE_ADD('2022-10-01', INTERVAL 180 DAY))),
+	('N76901', 'Airbus', 'A320', 5740, 7185, '2022-09-01', 90,
+  (SELECT DATE_ADD('2022-09-01', INTERVAL 90 DAY))),
+	('N314T', 'Boeing', '737', 3000, 6878, '2022-09-30', 90,
+  (SELECT DATE_ADD('2022-09-30', INTERVAL 90 DAY)));
 
 -- -----------------------------------------------------
 -- Data for table `Airports`
@@ -165,6 +169,14 @@ INSERT INTO `Airports` (`AirportID`, `Name`, `City`, `State`)
 	('SFO', 'San Francisco International Airport', 'San Francisco', 'California'),
 	('BOI', 'Boise Airport', 'Boise', 'Idaho'),
 	('FCA', 'Glacier Park International Airport', 'Kalispell', 'Montana');
+
+-- -----------------------------------------------------
+-- Data for table `Pilots`
+-- -----------------------------------------------------
+INSERT INTO `Pilots` (`FirstName`, `LastName`, `PhoneNumber`)
+  VALUES ('Steve', 'Morton', '222-356-8245'),
+  ('John', 'Woodward', '206-548-1255'),
+  ('Ryan', 'Kawalski', '908-457-8404');
 
 -- -----------------------------------------------------
 -- Data for table `Flights`
@@ -192,7 +204,7 @@ INSERT INTO `Flights` (`FlightID`, `Origin`, `Destination`, `Departure`, `Arriva
 -- -----------------------------------------------------
 -- Data for table `Customers`
 -- -----------------------------------------------------
-INSERT INTO `Customers` (`FirstName`, `LastName`, `AddressLine1`, `City`, `State`, ZIP Code, `PhoneNumber`) 
+INSERT INTO `Customers` (`FirstName`, `LastName`, `AddressLine1`, `City`, `State`, `ZIP_Code`, `PhoneNumber`) 
 	VALUES ('John', 'Smoth', '1234 Holden Ave SW', 'Seattle', 'WA', 98125, '206-333-5555'),
 	('James', 'Polk', '80 Raging River Way', 'Detroit', 'MI', 48126, '313-918-5486'),
 	('Laura', 'Croft', '640 Rainier Ave SW', 'Bellevue', 'WA', 98149, '206-443-9856');
@@ -205,13 +217,7 @@ INSERT INTO `Flights_has_Customers` (`Flights_FlightID`, `Customers_CustomerID`)
 	((SELECT FlightID FROM Flights WHERE FlightID = 90), (SELECT CustomerID FROM Customers WHERE CustomerID = 2)),
 	((SELECT FlightID FROM Flights WHERE FlightID = 90), (SELECT CustomerID FROM Customers WHERE CustomerID = 3));
 
--- -----------------------------------------------------
--- Data for table `Pilots`
--- -----------------------------------------------------
-INSERT INTO `Pilots` (`FirstName`, `LastName`, `PhoneNumber`)
-  VALUES ('Steve', 'Morton', '222-356-8245'),
-  ('John', 'Woodward', '206-548-1255'),
-  ('Ryan', 'Kawalski', '908-457-8404');
+
 
 SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
