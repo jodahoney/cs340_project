@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Orcas Air{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<table>
+    <thead>
+    <tr>
+        <!-- Iterate through each key in the first entry to get the
+        column name -->
+        {% for key in data[0].keys() %}
+
+        <!-- Create a <th> tag with the key inside of it, this will be
+        our header row -->
+        <th>{{ key }}</th>
+
+        <!-- End of this for loop -->
+        {% endfor %}
+    </tr>
+    <tbody>
+
+    <!-- Now, iterate through every person in bsg_people -->
+    {% for val in data %}
+    <tr>
+        <!-- Then iterate through every key in the current person dictionary -->
+        {% for key in val.keys() %}
+
+        <!-- Create a <td> element with the value of that key in it -->
+        <td>{{val[key]}}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
