@@ -7,11 +7,7 @@ import os
 app = Flask(__name__)
 db_connection = db.connect_to_database()
 
-# app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
-# app.config['MYSQL_USER'] = 'cs340_dehoneyj'
-# app.config['MYSQL_PASSWORD'] = '2584' #last 4 of onid
-# app.config['MYSQL_DB'] = 'cs340_dehoneyj'
-# app.config['MYSQL_CURSORCLASS'] = "DictCursor"
+app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 
 # Routes 
 
@@ -21,7 +17,7 @@ def root():
 
 @app.route('/orcas')
 def orcas():
-
+    # Show all flights
     query = "SELECT * FROM Flights;"
     cursor = db.execute_query(db_connection=db_connection, query=query)
     results = cursor.fetchall()
@@ -65,13 +61,12 @@ def airports():
 
 # route for delete functionality, deleting an airport
 # we want to pass the 'id' value of that person on button click (see HTML) via the route
-@app.route("/delete_airport/<int:id>")
+@app.route("/delete-airport/<string:id>")
 def delete_airport(id):
     # mySQL query to delete the person with our passed id
-    query = "DELETE FROM Airports WHERE id = '%s';"
-    cur = db.connection.cursor()
-    cur.execute(query, (id,))
-    db.connection.commit()
+    query = "DELETE FROM Airports WHERE AirportID = '%s';" % (id)
+    cursor = db.execute_query(db_connection=db_connection, query=query)
+    data = cursor.fetchall()
 
     # redirect back to airport page
     return redirect("/airports")
@@ -79,16 +74,15 @@ def delete_airport(id):
 
 # route for edit functionality, updating the attributes of a person in bsg_people
 # similar to our delete route, we want to the pass the 'id' value of that person on button click (see HTML) via the route
-@app.route("/edit_airport/<int:id>", methods=["POST", "GET"])
+@app.route("/edit-airport/<string:id>", methods=["POST", "GET"])
 def edit_airport(id):
     if request.method == "GET":
         # mySQL query to grab the info of the person with our passed id
         query = "SELECT * FROM Airports WHERE id = %s" % (id)
-        cur = db.connection.cursor()
-        cur.execute(query)
-        data = cur.fetchall()
+        cursor = db.execute_query(db_connection=db_connection, query=query)
+        data = cursor.fetchall()
 
-        return render_template("edit_airport.j2", data=data)
+        return render_template("edit_airport.html", data=data)
 
     # meat and potatoes of our update functionality
     if request.method == "POST":
