@@ -1,69 +1,61 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Orcas Air - Airports{% endblock %}</h1>
+  <h1>{% block title %}Orcas Air Airports{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-
-  <p>
-    Browse airports where Orcas Air provides service.
-  </p>
-
-  <table class="table">
+<table class="table"e>
     <thead class="thead-dark">
-      <tr>
-        <th scope="col">AirportID</th>
-        <th scope="col">Name</th>
-        <th scope="col">City</th>
-        <th scope="col">State</th>
+    <tr>
+        <!-- Iterate through each key in the first entry to get the
+        column name -->
+        {% for key in data[0].keys() %}
+
+        <!-- Create a <th> tag with the key inside of it, this will be
+        our header row -->
+        <th scope="col">{{ key }}</th>
+
+        <!-- End of this for loop -->
+        {% endfor %}
         <th scope="col">Edit|Delete</th>
-      </tr>
-    </thead>
+    </tr>
     <tbody>
-      <tr>
-        <th scope="row">SEA</th>
-        <td>Seattle-Tacoma International Airport</td>
-        <td>Seattle</td>
-        <td>Washington</td>
-        <td>
-          <i class="fa-solid fa-pen-to-square"></i>
-          |
-          <i class="fa-solid fa-delete-left"></i>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">PDX</th>
-        <td>Portland International Airport</td>
-        <td>Portland</td>
-        <td>Oregon</td>
-        <td>
-          <i class="fa-solid fa-pen-to-square"></i>
-          |
-          <i class="fa-solid fa-delete-left"></i>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 
-  <form>
-    <div class="form-group">
-      <label for="airportIDInput">Airport ID</label>
-      <input type="text" class="form-control" id="airportIDInput" placeholder="Enter Airport ID">
-    </div>
-    <div class="form-group">
-      <label for="nameInput">Airport Name</label>
-      <input type="text" class="form-control" id="nameInput" placeholder="Enter Name">
-    </div>
-    <div class="form-group">
-      <label for="cityInput">City</label>
-      <input type="text" class="form-control" id="cityInput" placeholder="Enter City">
-    </div>
-    <div class="form-group">
-      <label for="stateInput">State</label>
-      <input type="number" class="form-control" id="stateInput" placeholder="Enter State">
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+    <!-- Now, iterate through every person in bsg_people -->
+    {% for item in data %}
+    <tr>
+        <!-- Then iterate through every key in the current person dictionary -->
+        {% for key in item.keys() %}
 
+        <!-- Create a <td> element with the value of that key in it -->
+        <td>{{item[key]}}</td>
+        {% endfor %}
+        <td>
+            <a href="{{ url_for('edit_airport', id=item.AirportID) }}">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+            |
+            <a href="{{ url_for('delete_airport', id=item.AirportID) }}">
+                <i class="fa-solid fa-delete-left"></i>
+            </a>
+            
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+
+    <h4>Add a New Airport:</h4>
+
+    <form id="insertAirport" action="{{ url_for('airports') }}" method="post">
+        {% for value in data[0] %}
+            <div class="form-group">
+                <label for={{value}}>{{value}}</label>
+                <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}">
+            </div>
+    
+        {% endfor %}
+    
+        <input type="submit" name="Add_Airport" value="Add Airport" class="btn btn-primary">
+      </form>
 {% endblock %}
