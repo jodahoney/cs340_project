@@ -88,18 +88,17 @@ def edit_airport(id):
     if request.method == "POST":
         if request.form.get("Edit_Airport"):
             # grab user form inputs
-            airportID = request.form["AirportID"]
             name = request.form["Name"]
             city = request.form["City"]
             state = request.form["State"]
-
+            
+            # . UPDATE table_name SET column1 = value1, column2 = value2 WHERE id=100;
             query = "UPDATE Airports SET Airports.Name = %s, Airports.City = %s, Airports.State = %s WHERE Airports.AirportID = %s;"
-            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(name, city, state, airportID))
-
+            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(name, city, state, id))
+            data = cursor.fetchall()
+            print(data)
             # redirect back to people page after we execute the update query
             return redirect("/airports")
-
-
             
 
 # Listener
