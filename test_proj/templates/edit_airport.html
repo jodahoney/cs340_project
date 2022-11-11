@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Edit Airport: {{data[0].AirportID}} {% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<form id="editAirport" method="post">
+    {% for value in data[0] %}
+        <div class="form-group">
+            <label for={{value}}>{{value}}: Current = {{ data[0][value] }}</label>
+            <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}">
+        </div>
+
+    {% endfor %}
+
+    <input type="submit" name="Edit_Airport" value="Edit Airport" class="btn btn-primary">
+  </form>
+{% endblock %}
