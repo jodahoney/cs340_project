@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Orcas Air{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<table class="table"e>
+    <thead class="thead-dark">
+    <tr>
+        <!-- Iterate through each key in the first entry to get the
+        column name -->
+        {% for key in data[0].keys() %}
+
+        <!-- Create a <th> tag with the key inside of it, this will be
+        our header row -->
+        <th scope="col">{{ key }}</th>
+
+        <!-- End of this for loop -->
+        {% endfor %}
+        <th scope="col">Edit|Delete</th>
+    </tr>
+    <tbody>
+
+    <!-- Now, iterate through every person in bsg_people -->
+    {% for item in data %}
+    <tr>
+        <!-- Then iterate through every key in the current person dictionary -->
+        {% for key in item.keys() %}
+
+        <!-- Create a <td> element with the value of that key in it -->
+        <td>{{item[key]}}</td>
+        {% endfor %}
+        <td>
+            <a href="{{ url_for('edit_airplanes', id=item.TailNumber) }}">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+            |
+            <a href="{{ url_for('delete_airplane', id=item.TailNumber) }}">
+                <i class="fa-solid fa-delete-left"></i>
+            </a>
+            
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+
+    <h4>Add a New Airplane:</h4>
+
+    <form id="insertAirplane" action="{{ url_for('airplanes') }}" method="post">
+        {% for value in data[0] %}
+            <div class="form-group">
+                <label for={{value}}>{{value}}</label>
+                <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}">
+            </div>
+    
+        {% endfor %}
+    
+        <input type="submit" name="Add_Airplane" value="Add Airplane" class="btn btn-primary">
+      </form>
+{% endblock %}
