@@ -205,7 +205,7 @@ def pilots():
 
 # route for delete functionality, deleting an airport
 # we want to pass the 'id' value of that person on button click (see HTML) via the route
-@app.route("/delete-pilots/<string:id>")
+@app.route("/delete-pilot/<string:id>")
 def delete_pilot(id):
     # mySQL query to delete the person with our passed id
     query = "DELETE FROM Pilots WHERE PilotID = '%s';" % (id)
@@ -245,9 +245,86 @@ def edit_pilot(id):
             return redirect("/pilots")
 
 # Customers
-@app.route('/customers')
+@app.route("/customers", methods=["POST", "GET"])
 def customers():
-    return render_template('customers.html')
+
+    # insert into the customers entity
+    if request.method == "POST":
+        # fire off if user presses the Add Person button
+        if request.form.get("Add_Customer"):
+            # grab user form inputs
+            fname = request.form["FirstName"]
+            lname = request.form["LastName"]
+            address1 = request.form["AddressLine1"]
+            address2 = request.form["AddressLine2"]
+            city = request.form["City"]
+            state = request.form["State"]
+            zip_code = request.form["ZIP_Code"]
+            phone_number = request.form["PhoneNumber"]
+        
+            # assuming no null inputs
+            query = "INSERT INTO Customers (`FirstName`, `LastName`, `AddressLine1`, `AddressLine2`, `City`, `State`, `ZIP_Code`, `PhoneNumber`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"
+            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(fname, lname, address1, address2, city, state, zip_code, phone_number))
+            results = cursor.fetchall()
+
+            return redirect("/customers")
+
+    # Grab Customers data so we send it to our template to display
+    if request.method == "GET":
+        # db query to grab all the people in bsg_people
+        query = "SELECT * FROM Customers;"
+        cursor = db.execute_query(db_connection=db_connection, query=query)
+        data = cursor.fetchall()
+
+        # render edit_people page passing our query data and homeworld data to the edit_people template
+        return render_template("customers.html", data=data)
+
+
+# route for delete functionality, deleting an airport
+# we want to pass the 'id' value of that person on button click (see HTML) via the route
+@app.route("/delete-customer/<string:id>")
+def delete_customer(id):
+    # mySQL query to delete the person with our passed id
+    query = "DELETE FROM Customers WHERE CustomerID = '%s';" % (id)
+    cursor = db.execute_query(db_connection=db_connection, query=query)
+    data = cursor.fetchall()
+
+    # redirect back to airport page
+    return redirect("/customers")
+
+
+# route for edit functionality, updating the attributes of a person in bsg_people
+# similar to our delete route, we want to the pass the 'id' value of that person on button click (see HTML) via the route
+@app.route("/edit-customer/<string:id>", methods=["POST", "GET"])
+def edit_customer(id):
+    if request.method == "GET":
+        # mySQL query to grab the info of the person with our passed id
+        query = "SELECT * FROM Customers WHERE CustomerID = '%s';" % (id)
+        cursor = db.execute_query(db_connection=db_connection, query=query)
+        data = cursor.fetchall()
+
+        return render_template("edit_customer.html", data=data)
+
+    # meat and potatoes of our update functionality
+    if request.method == "POST":
+        if request.form.get("Edit_Customer"):
+            # grab user form inputs
+            fname = request.form["FirstName"]
+            lname = request.form["LastName"]
+            address1 = request.form["AddressLine1"]
+            address2 = request.form["AddressLine2"]
+            city = request.form["City"]
+            state = request.form["State"]
+            zip_code = request.form["ZIP_Code"]
+            phone_number = request.form["PhoneNumber"]
+            
+            # . UPDATE table_name SET column1 = value1, column2 = value2 WHERE id=100;
+            query = "UPDATE Customers SET Customers.FirstName = %s, Customers.LastName = %s, Customers.AddressLine1 = %s, Customers.AddressLine2 = %s, Customers.City = %s, Customers.State = %s, Customers.ZIP_Code = %s, Customers.PhoneNumber = %s WHERE Customers.CustomerID = %s;"
+            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(fname, lname, address1, address2, city, state, zip_code, phone_number, id))
+            data = cursor.fetchall()
+            print(data)
+            # redirect back to people page after we execute the update query
+            return redirect("/customers")
 
 # Flights_has_customers
 @app.route('/flights-customers')

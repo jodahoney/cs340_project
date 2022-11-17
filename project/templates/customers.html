@@ -12,103 +12,87 @@
 
   <table class="table">
     <thead class="thead-dark">
-      <tr>
-        <th scope="col">First Name</th>
-        <th scope="col">Last Name</th>
-        <th scope="col">Address</th>
-        <th scope="col">City</th>
-        <th scope="col">State</th>
-        <th scope="col">ZIP Code</th>
-        <th scope="col">Phone Number</th>
-        <th scope="col">Flight</th>
+    <tr>
+        <!-- Iterate through each key in the first entry to get the
+        column name -->
+        {% for key in data[0].keys() %}
+
+        <!-- Create a <th> tag with the key inside of it, this will be
+        our header row -->
+        <th scope="col">{{ key }}</th>
+
+        <!-- End of this for loop -->
+        {% endfor %}
         <th scope="col">Edit|Delete</th>
-      </tr>
-    </thead>
+    </tr>
     <tbody>
-      <tr>
-        <th scope="row">John</th>
-        <td>Smith</td>
-        <td>1234 Holden Ave SW</td>
-        <td>Seattle</td>
-        <td>WA</td>
-        <td>98425</td>
-        <td>206-333-555</td>
-        <td>SEA -> PDX 2022/04/22</td>
-        <td>
-          <i class="fa-solid fa-pen-to-square"></i>
-          |
-          <i class="fa-solid fa-delete-left"></i>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">James</th>
-        <td>Polk</td>
-        <td>80 Raging River Way</td>
-        <td>Detroit</td>
-        <td>MI</td>
-        <td>48126</td>
-        <td>313-918-5486</td>
-        <td>SEA -> PDX 2022/04/22</td>
-        <td>
-          <i class="fa-solid fa-pen-to-square"></i>
-          |
-          <i class="fa-solid fa-delete-left"></i>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">Laura</th>
-        <td>Croft</td>
-        <td>640 Rainer Ave SW</td>
-        <td>Belevue</td>
-        <td>WA</td>
-        <td>98248</td>
-        <td>206-444-1288</td>
-        <td>SEA -> PDX 2022/04/22</td>
-        <td>
-          <i class="fa-solid fa-pen-to-square"></i>
-          |
-          <i class="fa-solid fa-delete-left"></i>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 
-  <form>
-    <div class="form-group">
-      <label for="firstNameInput">First Name</label>
-      <input type="datetime" class="form-control" id="firstNameInput" placeholder="Enter First Name">
-    </div>
-    <div class="form-group">
-      <label for="lastNameInput">Last Name</label>
-      <input type="datetime" class="form-control" id="lastNameInput" placeholder="Enter Last Name">
-    </div>
-    <div class="form-group">
-      <label for="addressInput">Address Line 1</label>
-      <input type="text" class="form-control" id="addressInput" placeholder="Enter Address">
-    </div>
-    <div class="form-group">
-      <label for="addressInput">City</label>
-      <input type="text" class="form-control" id="addressInput" placeholder="Enter Address">
-    </div>
-    <div class="form-group">
-      <label for="addressInput">State</label>
-      <input type="text" class="form-control" id="addressInput" placeholder="Enter Address">
-    </div>
-    <div class="form-group">
-      <label for="addressInput">ZIP Code</label>
-      <input type="text" class="form-control" id="addressInput" placeholder="Enter Address">
-    </div>
-    <div class="form-group">
-      <label for="phoneNumberInput">Phone Number</label>
-      <input type="phone" class="form-control" id="phoneNumberInput" placeholder="Enter Phone Number">
-    </div>
-    <div class="form-group">
-      <label for="flightInput">Flight</label>
-      <select class="form-control" id="flightInput">
-        <option>SEA -> PDX 2022/04/22</option>
-      </select> 
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+    <!-- Now, iterate through every person in bsg_people -->
+    {% for item in data %}
+    <tr>
+        <!-- Then iterate through every key in the current person dictionary -->
+        {% for key in item.keys() %}
 
+        <!-- Create a <td> element with the value of that key in it -->
+        <td>{{item[key]}}</td>
+        {% endfor %}
+        <td>
+            <a href="{{ url_for('edit_customer', id=item.CustomerID) }}">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+            |
+            <a href="{{ url_for('delete_customer', id=item.CustomerID) }}">
+                <i class="fa-solid fa-delete-left"></i>
+            </a>
+            
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+
+    <h4>Add a New Customer:</h4>
+
+    <form id="Add_Customer" action="{{ url_for('customers') }}" method="post">
+      <div class="form-group">
+        <label for=FirstName> First Name: Current = {{ data[0].FirstName}}</label>
+        <input type="text" class="form-control" id="FirstName" name="FirstName" placeholder="Enter First Name">
+      </div>
+    
+      <div class="form-group">
+        <label for=LastName> Last Name: Current = {{ data[0].LastName}}</label>
+        <input type="text" class="form-control" id="LastName" name="LastName" placeholder="Enter Last Name">
+      </div>
+    
+      <div class="form-group">
+        <label for=AddressLine1> Address Line 1: Current = {{ data[0].AddressLine1}}</label>
+        <input type="text" class="form-control" id="AddressLine1" name="AddressLine1" placeholder="Enter Address Line1 ">
+      </div>
+    
+      <div class="form-group">
+        <label for=AddressLine2> Address Line 2: Current = {{ data[0].AddressLine2}}</label>
+        <input type="text" class="form-control" id="AddressLine2" name="AddressLine2" placeholder="Enter Address Line2 ">
+      </div>
+    
+      <div class="form-group">
+        <label for=City> City: Current = {{ data[0].City}}</label>
+        <input type="text" class="form-control" id="City" name="City" placeholder="Enter City">
+      </div>
+    
+      <div class="form-group">
+        <label for=State> State: Current = {{ data[0].State}}</label>
+        <input type="text" class="form-control" id="State" name="State" placeholder="Enter State">
+      </div>
+    
+      <div class="form-group">
+        <label for=ZIP_Code> ZIP Code: Current = {{ data[0].ZIP_Code}}</label>
+        <input type="number" class="form-control" id="ZIP_Code" name="ZIP_Code" placeholder="Enter ZIP Code">
+      </div>
+    
+      <div class="form-group">
+        <label for=PhoneNumber> Phone Number: Current = {{ data[0].PhoneNumber}}</label>
+        <input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber" placeholder="Enter Phone Number">
+      </div>
+    
+      <input type="submit" name="Add_Customer" value="Add Customer" class="btn btn-primary">
+    </form>
 {% endblock %}
