@@ -95,7 +95,8 @@ def flights():
     # - Make sure it is possible that a flight can be added without customers
     #   - but that is the ONLY nullable option
     # - add in the filter functionality to flights w/ customers so you can search for
-    #  that specific customer list based on click from flights or search in base page\
+    #  that specific customer list based on click from flights or search in base page
+    # - add pilot name and copilot name to results table intead of id\
 
     # insert into the flights entity
     if request.method == "POST":
@@ -110,7 +111,7 @@ def flights():
             Pilot = request.form["pilot-select"]
             CoPilot = request.form["copilot-select"]
             Aircraft = request.form["aircraft-select"]
-            # Customers = request.form["Customers"]
+            Customers = request.form.getlist("customer-select")
         
             # assuming no null inputs
             query = "INSERT INTO Flights \
@@ -121,6 +122,12 @@ def flights():
                 query=query, 
                 query_params=(Origin, Destination, Departure, Arrival, FlightDuration, Pilot, CoPilot, Aircraft)
                 )
+
+            # If they provided customers to book, add them to the flight
+            if Customers:
+                # Add to customers table
+
+
             results = cursor.fetchall()
             return redirect("/flights")
 

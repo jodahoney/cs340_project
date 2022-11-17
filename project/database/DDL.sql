@@ -58,7 +58,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `Flights` ;
 
 CREATE TABLE IF NOT EXISTS `Flights` (
-  `FlightID` INT NOT NULL,
+  `FlightID` INT NOT NULL AUTO_INCREMENT,
   `Origin` VARCHAR(3) NOT NULL,
   `Destination` VARCHAR(3) NOT NULL,
   `Departure` DATETIME NOT NULL,
