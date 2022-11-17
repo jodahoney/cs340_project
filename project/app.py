@@ -44,9 +44,6 @@ def airports():
         # render edit_people page passing our query data and homeworld data to the edit_people template
         return render_template("airports.html", data=data)
 
-
-# route for delete functionality, deleting an airport
-# we want to pass the 'id' value of that person on button click (see HTML) via the route
 @app.route("/delete-airport/<string:id>")
 def delete_airport(id):
     # mySQL query to delete the person with our passed id
@@ -57,9 +54,6 @@ def delete_airport(id):
     # redirect back to airport page
     return redirect("/airports")
 
-
-# route for edit functionality, updating the attributes of a person in bsg_people
-# similar to our delete route, we want to the pass the 'id' value of that person on button click (see HTML) via the route
 @app.route("/edit-airport/<string:id>", methods=["POST", "GET"])
 def edit_airport(id):
     if request.method == "GET":
@@ -92,9 +86,110 @@ def airplanes():
     return render_template('airplanes.html')
 
 # Flights
-@app.route('/flights')
+@app.route("/flights", methods=["POST", "GET"])
 def flights():
-    return render_template('flights.html')
+
+    # insert into the flights entity
+    if request.method == "POST":
+        # fire off if user presses the Add Flight button
+        if request.form.get("Add_Flight"):
+            # grab user form inputs
+            Origin = request.form["Origin"]
+            Destination = request.form["Destination"]
+            Departure = request.form["Departure"]
+            Arrival = request.form["Arrival"]
+            FlightDuration = request.form["FlightDuration"]
+            Pilot = request.form["Pilot"]
+            Copilot = request.form["Copilot"]
+            Aircraft = request.form["Aircraft"]
+            # Customers = request.form["Customers"]
+        
+            # assuming no null inputs
+            query = "INSERT INTO Flights \
+                (Origin, Destination, Departure, Arrival, FlightDuration, Pilot, Copilot, Aircraft) \
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);"
+            cursor = db.execute_query(
+                db_connection=db_connection, 
+                query=query, 
+                query_params=(Origin, Destination, Departure, Arrival, FlightDuration, Pilot, Copilot, Aircraft)
+                )
+            results = cursor.fetchall()
+            return redirect("/flights")
+
+    # Grab Flights data so we send it to our template to display
+    if request.method == "GET":
+        # db query to grab all the people in bsg_people
+        # query = "SELECT \
+        #     Origin, Destination, Arrival, FlightDuration, Pilot, Copilot, Aircraft, \
+        #     Customers.FirstName AS FName, Customers.LastName AS LName \
+        #     FROM Flights \
+        #     INNER JOIN Flights_has_Customers \
+        #     ON Flights.FlightID = Flights_has_Customers.FlightID;"
+        query = "SELECT \
+            FlightID, Origin, Destination, Departure, Arrival, FlightDuration, Pilot, Copilot, Aircraft, \
+            Customers.FirstName AS fname, Customers.LastName AS lname   \
+            FROM Flights \
+            INNER JOIN Flights_has_Customers \
+            ON Flights.FlightID = Flights_has_Customers.Flights_FlightID \
+            LEFT JOIN Customers \
+            ON Flights_has_Customers.Customers_CustomerID = Customers.CustomerID;"
+
+        cursor = db.execute_query(db_connection=db_connection, query=query)
+        data = cursor.fetchall()
+
+        # query to grab info from Customers
+        query2 = "SELECT FirstName, LastName FROM Customers"
+        cursor = db.execute_query(db_connection=db_connection, query=query2)
+        customers_data = cursor.fetchall()
+
+        # query to grab info from Flights_has_Customers intersection table
+        query3 = "SELECT * FROM Flights_has_Customers"
+        cursor = db.execute_query(db_connection=db_connection, query=query3)
+        fhc_data = cursor.fetchall()
+
+        # render edit_people page passing our query data and homeworld data to the edit_people template
+        return render_template("flights.html", data=data, customers=customers_data, fhc=fhc_data)
+
+
+# route for delete functionality, deleting an airport
+# we want to pass the 'id' value of that person on button click (see HTML) via the route
+@app.route("/delete-flight/<int:id>")
+def delete_flight(id):
+    # mySQL query to delete the person with our passed id
+    query = "DELETE FROM Flights WHERE FlightID = '%s';" % (id)
+    cursor = db.execute_query(db_connection=db_connection, query=query)
+    data = cursor.fetchall()
+
+    # redirect back to airport page
+    return redirect("/flights")
+
+
+# route for edit functionality, updating the attributes of a person in bsg_people
+# similar to our delete route, we want to the pass the 'id' value of that person on button click (see HTML) via the route
+@app.route("/edit-flight/<int:id>", methods=["POST", "GET"])
+def edit_flight(id):
+    if request.method == "GET":
+        # mySQL query to grab the info of the person with our passed id
+        query = "SELECT * FROM Flights WHERE FlightID = '%s';" % (id)
+        cursor = db.execute_query(db_connection=db_connection, query=query)
+        data = cursor.fetchall()
+
+        return render_template("edit_flight.html", data=data)
+
+    # meat and potatoes of our update functionality
+    if request.method == "POST":
+        if request.form.get("Edit_Flight"):
+            # grab user form inputs
+            name = request.form[""]
+            city = request.form[""]
+            state = request.form[""]
+        
+            query = "UPDATE Flights SET Airports.Name = %s, Airports.City = %s, Airports.State = %s WHERE Airports.AirportID = %s;"
+            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(name, city, state, id))
+            data = cursor.fetchall()
+            print(data)
+            # redirect back to people page after we execute the update query
+            return redirect("/flights")
 
 # Pilots
 @app.route('/pilots')

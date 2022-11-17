@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Edit Flight: {{data[0].FlightID}} {% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<form id="editFlight" action="{{ url_for('edit_flight', id=data[0].FlightID) }}" method="post">
+    {% for value in data[0] %}
+        {% if value != "FlightID" %}
+        <div class="form-group">
+            <label for={{value}}>{{value}}: Current = {{ data[0][value] }}</label>
+            <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}">
+        </div>
+        {% endif %}
+
+    {% endfor %}
+
+    <input type="submit" name="Edit_Flight" value="Edit Flight" class="btn btn-primary">
+  </form>
+{% endblock %}
