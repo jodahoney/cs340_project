@@ -25,7 +25,7 @@ def airports():
             state = request.form["State"]
         
             # assuming no null inputs
-            query = "INSERT INTO Airports (AirportID, Name, City, State) VALUES (%s, %s,%s,%s);"
+            query = "INSERT INTO Airports (`AirportID`, `Name`, `City`, `State`) VALUES (%s, %s, %s, %s);"
             # cur = db.connection.cursor()
             # cur.execute(query, (airportID, name, city, state))
             # db.connection.commit()
@@ -93,22 +93,22 @@ def airplanes():
     # insert into the airports entity
     if request.method == "POST":
         # fire off if user presses the Add airplane button
-        if request.form.get("Add_Airplanes"):
+        if request.form.get("Add_Airplane"):
             # grab user form inputs
             tail_number = request.form["TailNumber"]
             make = request.form["Make"]
             model = request.form["Model"]
-            range = request.form["Range"]
+            air_range = request.form["Range"]
             fuel_capacity = request.form["FuelCapacity"]
             last_maintenance_performed = request.form["LastMaintenancePerformed"]
             maintenance_frequency = request.form["MaintenanceFrequency"]
         
             # assuming no null inputs
-            query = "INSERT INTO Airplanes (TailNumber, Make, Model, Range, FuelCapacity, LastMaintenancePerformed, MaintenanceFrequency) VALUES (%s, %s, %s, %i, %i, %d. %i);"
+            query = "INSERT INTO Airplanes (`TailNumber`, `Make`, `Model`, `Range`, `FuelCapacity`, `LastMaintenancePerformed`, `MaintenanceFrequency`) VALUES (%s, %s, %s, %s, %s, %s, %s);"
             # cur = db.connection.cursor()
             # cur.execute(query, (airportID, name, city, state))
             # db.connection.commit()
-            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(tail_number, make, model, range, fuel_capacity, last_maintenance_performed, maintenance_frequency))
+            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(tail_number, make, model, air_range, fuel_capacity, last_maintenance_performed, maintenance_frequency))
             results = cursor.fetchall()
 
             return redirect("/airplanes")
@@ -152,8 +152,6 @@ def edit_airplane(id):
     # meat and potatoes of our update functionality
     if request.method == "POST":
         if request.form.get("Edit_Airplane"):
-            # grab user form inputs
-            tail_number = request.form["TailNumber"]
             make = request.form["Make"]
             model = request.form["Model"]
             range = request.form["Range"]
@@ -162,8 +160,8 @@ def edit_airplane(id):
             maintenance_frequency = request.form["MaintenanceFrequency"]
             
             # . UPDATE table_name SET column1 = value1, column2 = value2 WHERE id=100;
-            query = "UPDATE Airplanes SET Airplanes.TailNumber = %s, Airplanes.Make = %s, Airplanes.Model = %s, Airplanes.Range = %i, Airplanes.FuelCapacity = %i, Airplanes.LastMaintenancePerformed = %d, Airplanes.MaintenanceFrequency = %i WHERE Airplanes.TailNumber = %s;"
-            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(tail_number, make, model, range, fuel_capacity, last_maintenance_performed, maintenance_frequency))
+            query = "UPDATE Airplanes SET Airplanes.Make = %s, Airplanes.Model = %s, Airplanes.Range = %s, Airplanes.FuelCapacity = %s, Airplanes.LastMaintenancePerformed = %s, Airplanes.MaintenanceFrequency = %s WHERE Airplanes.TailNumber = %s;"
+            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(make, model, range, fuel_capacity, last_maintenance_performed, maintenance_frequency, id))
             data = cursor.fetchall()
             print(data)
             # redirect back to people page after we execute the update query

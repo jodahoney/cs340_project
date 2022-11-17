@@ -1,21 +1,36 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Edit Airport: {{data[0].AirportID}} {% endblock %}</h1>
+  <h1>{% block title %}Edit Airplane: {{data[0].TailNumber}} {% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
 <form id="editAirplane" action="{{ url_for('edit_airplane', id=data[0].TailNumber) }}" method="post">
-    {% for value in data[0] %}
-        {% if value != "AirportID" %}
-        <div class="form-group">
-            <label for={{value}}>{{value}}: Current = {{ data[0][value] }}</label>
-            <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}">
-        </div>
-        {% endif %}
+  <div class="form-group">
+    <label for=Make> Make: Current = {{ data[0].Make}}</label>
+    <input type="text" class="form-control" id="Make" name="Make" placeholder="Enter Make">
+  </div>
+  <div class="form-group">
+    <label for=Model> Model: Current = {{ data[0].Model}}</label>
+    <input type="text" class="form-control" id="Model" name="Model" placeholder="Enter Model">
+  </div>
+  <div class="form-group">
+    <label for=Range> Range: Current = {{ data[0].Range}}</label>
+    <input type="number" class="form-control" id="Range" name="Range" placeholder="Enter Range">
+  </div>
+  <div class="form-group">
+    <label for=FuelCapacity> FuelCapacity: Current = {{ data[0].FuelCapacity}}</label>
+    <input type="number" class="form-control" id="FuelCapacity" name="FuelCapacity" placeholder="Enter FuelCapacity">
+  </div>
+  <div class="form-group">
+    <label for=LastMaintenancePerformed> LastMaintenancePerformed: Current = {{ data[0].LastMaintenancePerformed}}</label>
+    <input type="date" class="form-control" id="LastMaintenancePerformed" name="LastMaintenancePerformed" placeholder="Enter LastMaintenancePerformed">
+  </div>
+  <div class="form-group">
+    <label for=MaintenanceFrequency> MaintenanceFrequency: Current = {{ data[0].MaintenanceFrequency}}</label>
+    <input type="number" class="form-control" id="MaintenanceFrequency" name="MaintenanceFrequency" placeholder="Enter MaintenanceFrequency">
+  </div>
 
-    {% endfor %}
-
-    <input type="submit" name="Edit_Airplane" value="Edit Airplane" class="btn btn-primary">
-  </form>
+  <input type="submit" name="Edit_Airplane" value="Edit Airplane" class="btn btn-primary">
+</form>
 {% endblock %}
