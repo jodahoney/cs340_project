@@ -1,136 +1,73 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Orcas Air - Flights{% endblock %}</h1>
+  <h1>{% block title %}Orcas Air Flights{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
 
-  <p>
-    Flights that are available from Orcas Air.
-  </p>
-
-  <h3>Search for flights by destination:</h3>
-
-  <table class="table">
-    <select class="form-select">
-      <option selected></option>
-      <option value="PDX">Portland</option>
-      <option value="SEA">Seattle</option>
-    </select>
-  </table>
-
-
-  <table class="table">
+{{ data }}
+<br>
+{{ customers }}
+<br>
+{{ fhc }}
+<br>
+<table class="table"e>
     <thead class="thead-dark">
-      <tr>
+    <tr>
         <th scope="col">Origin</th>
         <th scope="col">Destination</th>
         <th scope="col">Departure</th>
         <th scope="col">Arrival</th>
-        <th scope="col">FlightDuration</th>
+        <th scope="col">Flight Duration</th>
         <th scope="col">Pilot</th>
         <th scope="col">Copilot</th>
         <th scope="col">Aircraft</th>
         <th scope="col">Customers</th>
         <th scope="col">Edit|Delete</th>
-      </tr>
-    </thead>
+    </tr>
     <tbody>
-      <tr>
-        <th scope="row">SEA</th>
-        <td>PDX</td>
-        <td>2022/04/22 21:50:25</td>
-        <td>2022/04/22 22:50:25</td>
-        <td>60</td>
-        <td>Steve Morton</td>
-        <td>John Woodward</td>
-        <td>NB3RF</td>
-        <td>
-          John Smith,
-          James Polk,
-          Laura Croft
-        </td>
-        <td>
-          <i class="fa-solid fa-pen-to-square"></i>
-          |
-          <i class="fa-solid fa-delete-left"></i>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 
-  <form>
-    <div class="form-group">
-      <label for="originInput">Origin</label>
-      <select class="form-control" id="originInput">
-        <option>Seattle-Tacoma International Airport</option>
-        <option>Portland International Airport</option>
-      </select> 
-    </div>
-    <div class="form-group">
-      <label for="destinationInput">Destination</label>
-      <select class="form-control" id="destinationInput">
-        <option>Seattle-Tacoma International Airport</option>
-        <option>Portland International Airport</option>
-      </select> 
-    </div>
-    <div class="form-group">
-      <label for="departureInput">Departure</label>
-      <input type="datetime" class="form-control" id="departureInput" placeholder="Enter Departure">
-    </div>
-    <div class="form-group">
-      <label for="arrivalInput">Arrival</label>
-      <input type="datetime" class="form-control" id="arrivalInput" placeholder="Enter Arrival">
-    </div>
-    <div class="form-group">
-      <label for="flightDurationInput">Flight Duration</label>
-      <input type="number" class="form-control" id="flightDurationInput" placeholder="Enter Flight Duration">
-    </div>
-    <div class="form-group">
-      <label for="pilotInput">Pilot</label>
-      <select class="form-control" id="pilotInput">
-        <option>Steve Morton</option>
-        <option>John Woodward</option>
-      </select> 
-    </div>
-    <div class="form-group">
-      <label for="copilotInput">CoPilot</label>
-      <select class="form-control" id="copilotInput">
-        <option>Steve Morton</option>
-        <option>John Woodward</option>
-      </select> 
-    </div>
-    <div class="form-group">
-      <label for="aircraftInput">Aircraft</label>
-      <select class="form-control" id="aircraftInput">
-        <option>NB3RF</option>
-      </select> 
-    </div>
-  
-    <div class="form-group">
-      <label for="customerAdd">Add Customers:</label>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
-        <label class="form-check-label" for="flexCheckDefault">
-          John Smith
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="2" id="flexCheckDefault">
-        <label class="form-check-label" for="flexCheckDefault">
-          James Polk
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="3" id="flexCheckDefault">
-        <label class="form-check-label" for="flexCheckDefault">
-          Laura Croft
-        </label>
-      </div>
-      
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+    {% for item in data %}
+    <tr>
+        <!-- Then iterate through every key in the current person dictionary -->
+        <td>{{ item.Origin }}</td>
+        <td>{{ item.Destination }}</td>
+        <td>{{ item.Departure }}</td>
+        <td>{{ item.Arrival }}</td>
+        <td>{{ item.FlightDuration }}</td>
+        <td>{{ item.Pilot }}</td>
+        <td>{{ item.Copilot }}</td>
+        <td>{{ item.Aircraft }}</td>
+        <td>{{ item.fname }}</td>
+        <td>{{ item.lname }}</td>
+        <td>
+            <a href="{{ url_for('edit_flight', id=item.FlightID) }}">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+            |
+            <a href="{{ url_for('delete_flight', id=item.FlightID) }}">
+                <i class="fa-solid fa-delete-left"></i>
+            </a>
+            
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
 
+    <h4>Add a New Flight:</h4>
+
+    <form id="insertFlight" action="{{ url_for('flights') }}" method="post">
+        {% for value in data[0] %}
+          {% if value != "FlightID" %}
+            <div class="form-group">
+                <label for={{value}}>{{value}}</label>
+                <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}">
+            </div>
+          {% endif %}
+    
+        {% endfor %}
+    
+        <input type="submit" name="Add_Flight" value="Add Flight" class="btn btn-primary">
+      </form>
 {% endblock %}
