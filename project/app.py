@@ -173,9 +173,76 @@ def flights():
     return render_template('flights.html')
 
 # Pilots
-@app.route('/pilots')
+@app.route("/pilots", methods=["POST", "GET"])
 def pilots():
-    return render_template('pilots.html')
+
+    # insert into the airports entity
+    if request.method == "POST":
+        # fire off if user presses the Add Person button
+        if request.form.get("Add_Pilot"):
+            # grab user form inputs
+            fname = request.form["FirstName"]
+            lname = request.form["LastName"]
+            phone_number = request.form["PhoneNumber"]
+        
+            # assuming no null inputs
+            query = "INSERT INTO Pilots (`FirstName`, `LastName`, `PhoneNumber`) VALUES (%s, %s, %s);"
+            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(fname, lname, phone_number))
+            results = cursor.fetchall()
+
+            return redirect("/pilots")
+
+    # Grab Airports data so we send it to our template to display
+    if request.method == "GET":
+        # db query to grab all the people in bsg_people
+        query = "SELECT * FROM Pilots;"
+        cursor = db.execute_query(db_connection=db_connection, query=query)
+        data = cursor.fetchall()
+
+        # render edit_people page passing our query data and homeworld data to the edit_people template
+        return render_template("pilots.html", data=data)
+
+
+# route for delete functionality, deleting an airport
+# we want to pass the 'id' value of that person on button click (see HTML) via the route
+@app.route("/delete-pilots/<string:id>")
+def delete_pilot(id):
+    # mySQL query to delete the person with our passed id
+    query = "DELETE FROM Pilots WHERE PilotID = '%s';" % (id)
+    cursor = db.execute_query(db_connection=db_connection, query=query)
+    data = cursor.fetchall()
+
+    # redirect back to airport page
+    return redirect("/pilots")
+
+
+# route for edit functionality, updating the attributes of a person in bsg_people
+# similar to our delete route, we want to the pass the 'id' value of that person on button click (see HTML) via the route
+@app.route("/edit-pilot/<string:id>", methods=["POST", "GET"])
+def edit_pilot(id):
+    if request.method == "GET":
+        # mySQL query to grab the info of the person with our passed id
+        query = "SELECT * FROM Pilots WHERE PilotID = '%s';" % (id)
+        cursor = db.execute_query(db_connection=db_connection, query=query)
+        data = cursor.fetchall()
+
+        return render_template("edit_pilot.html", data=data)
+
+    # meat and potatoes of our update functionality
+    if request.method == "POST":
+        if request.form.get("Edit_Pilot"):
+            # grab user form inputs
+            fname = request.form["FirstName"]
+            lname = request.form["LastName"]
+            phone_number = request.form["PhoneNumber"]
+            
+            # . UPDATE table_name SET column1 = value1, column2 = value2 WHERE id=100;
+            query = "UPDATE Pilots SET Pilots.FirstName = %s, Pilots.LastName = %s, Pilots.PhoneNumber = %s WHERE Pilots.PilotID = %s;"
+            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(fname, lname, phone_number, id))
+            data = cursor.fetchall()
+            print(data)
+            # redirect back to people page after we execute the update query
+            return redirect("/pilots")
 
 # Customers
 @app.route('/customers')
