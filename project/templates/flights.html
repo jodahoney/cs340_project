@@ -6,12 +6,7 @@
 
 {% block content %}
 
-{{ data }}
-<br>
-{{ customers }}
-<br>
-{{ fhc }}
-<br>
+
 <table class="table"e>
     <thead class="thead-dark">
     <tr>
@@ -37,10 +32,9 @@
         <td>{{ item.Arrival }}</td>
         <td>{{ item.FlightDuration }}</td>
         <td>{{ item.Pilot }}</td>
-        <td>{{ item.Copilot }}</td>
+        <td>{{ item.CoPilot }}</td>
         <td>{{ item.Aircraft }}</td>
-        <td>{{ item.fname }}</td>
-        <td>{{ item.lname }}</td>
+        <td><a href="{{ url_for('flightsCustomers', id=item.FlightID) }}">View Customers</a></td>
         <td>
             <a href="{{ url_for('edit_flight', id=item.FlightID) }}">
                 <i class="fa-solid fa-pen-to-square"></i>
@@ -57,17 +51,78 @@
 
     <h4>Add a New Flight:</h4>
 
+    <!-- Selects for Origin and Destination -->
     <form id="insertFlight" action="{{ url_for('flights') }}" method="post">
-        {% for value in data[0] %}
-          {% if value != "FlightID" %}
-            <div class="form-group">
-                <label for={{value}}>{{value}}</label>
-                <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}">
-            </div>
-          {% endif %}
-    
+      <div class="row">
+        <div class="form-group col" >
+          <label for="origin-select">Origin</label>
+          <select class="form-select" name="origin-select">
+            {% for airport in airport_data %}
+            <option value={{airport.AirportID}}>{{airport.AirportID}}, {{airport.Name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group col">
+          <label for="destination-select">Destination</label>
+          <select class="form-select" name="destination-select">
+            {% for airport in airport_data %}
+            <option value={{airport.AirportID}}>{{airport.AirportID}}, {{airport.Name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      
+      {% for value in data[0] %}
+        {% if value not in  ["FlightID", "Origin", "Destination", "Pilot", "CoPilot", "Aircraft"] %}
+          <div class="form-group">
+              <label for={{value}}>{{value}}</label>
+              <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}">
+          </div>
+        {% endif %}  
+      {% endfor %}
+
+      <!-- TODO: Make sure the same pilot isn't selected for pilot and copilot -->
+      <div class="row">
+        <div class="form-group col">
+          <label for="pilot-select">Pilot</label>
+          <select class="form-select" name="pilot-select">
+            {% for pilot in pilot_data %}
+            <option value={{pilot.PilotID}}>{{pilot.FirstName}}, {{pilot.LastName}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group col">
+          <label for="copilot-select">CoPilot</label>
+          <select class="form-select" name="copilot-select">
+            {% for pilot in pilot_data %}
+            <option value={{pilot.PilotID}}>{{pilot.FirstName}}, {{pilot.LastName}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      
+
+      <!-- Aircraft Select-->
+      <div class="form-group">
+        <label for="aircraft-select">Aircraft</label>
+        <select class="form-select" name="aircraft-select">
+          {% for aircraft in aircraft_data %}
+          <option value={{aircraft.TailNumber}}>{{aircraft.TailNumber}}: {{aircraft.Make}}, {{aircraft.Model}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+
+
+      <!-- Customer Select -->
+      <label for="customer-select">Add Customers:</label><br>
+      <select class="form-select" multiple id="customer-select" name="customer-select">
+        {% for customer in customer_data %}
+          <option value={{customer.CustomerID}}>{{customer.FirstName}}, {{customer.LastName}}</option>
         {% endfor %}
-    
-        <input type="submit" name="Add_Flight" value="Add Flight" class="btn btn-primary">
-      </form>
+      </select>
+      
+      <br><br>
+      <input type="submit" name="Add_Flight" value="Add Flight" class="btn btn-primary">
+    </form>
 {% endblock %}
