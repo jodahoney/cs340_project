@@ -54,43 +54,43 @@
 
     <form id="Add_Customer" action="{{ url_for('customers') }}" method="post">
       <div class="form-group">
-        <label for=FirstName> First Name: Current = {{ data[0].FirstName}}</label>
-        <input type="text" class="form-control" id="FirstName" name="FirstName" placeholder="Enter First Name">
+        <label for=FirstName> First Name </label>
+        <input type="text" class="form-control" id="FirstName" name="FirstName" placeholder="Enter First Name" required>
       </div>
     
       <div class="form-group">
-        <label for=LastName> Last Name: Current = {{ data[0].LastName}}</label>
-        <input type="text" class="form-control" id="LastName" name="LastName" placeholder="Enter Last Name">
+        <label for=LastName> Last Name </label>
+        <input type="text" class="form-control" id="LastName" name="LastName" placeholder="Enter Last Name" required>
       </div>
     
       <div class="form-group">
-        <label for=AddressLine1> Address Line 1: Current = {{ data[0].AddressLine1}}</label>
-        <input type="text" class="form-control" id="AddressLine1" name="AddressLine1" placeholder="Enter Address Line1 ">
+        <label for=AddressLine1> Address Line 1 </label>
+        <input type="text" class="form-control" id="AddressLine1" name="AddressLine1" placeholder="Enter Address Line1" required>
       </div>
     
       <div class="form-group">
-        <label for=AddressLine2> Address Line 2: Current = {{ data[0].AddressLine2}}</label>
-        <input type="text" class="form-control" id="AddressLine2" name="AddressLine2" placeholder="Enter Address Line2 ">
+        <label for=AddressLine2> Address Line 2 </label>
+        <input type="text" class="form-control" id="AddressLine2" name="AddressLine2" placeholder="Enter Address Line2">
       </div>
     
       <div class="form-group">
-        <label for=City> City: Current = {{ data[0].City}}</label>
-        <input type="text" class="form-control" id="City" name="City" placeholder="Enter City">
+        <label for=City> City </label>
+        <input type="text" class="form-control" id="City" name="City" placeholder="Enter City" required>
       </div>
     
       <div class="form-group">
-        <label for=State> State: Current = {{ data[0].State}}</label>
-        <input type="text" class="form-control" id="State" name="State" placeholder="Enter State">
+        <label for=State> State </label>
+        <input type="text" class="form-control" id="State" name="State" placeholder="Enter State" required>
       </div>
     
       <div class="form-group">
-        <label for=ZIP_Code> ZIP Code: Current = {{ data[0].ZIP_Code}}</label>
-        <input type="number" class="form-control" id="ZIP_Code" name="ZIP_Code" placeholder="Enter ZIP Code">
+        <label for=ZIP_Code> ZIP Code </label>
+        <input type="number" class="form-control" id="ZIP_Code" name="ZIP_Code" placeholder="Enter ZIP Code" required>
       </div>
     
       <div class="form-group">
-        <label for=PhoneNumber> Phone Number: Current = {{ data[0].PhoneNumber}}</label>
-        <input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber" placeholder="Enter Phone Number">
+        <label for=PhoneNumber> Phone Number </label>
+        <input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber" placeholder="Enter Phone Number" required>
       </div>
     
       <input type="submit" name="Add_Customer" value="Add Customer" class="btn btn-primary">

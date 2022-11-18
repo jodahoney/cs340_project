@@ -10,7 +10,7 @@
         {% if value != "AirportID" %}
         <div class="form-group">
             <label for={{value}}>{{value}}: Current = {{ data[0][value] }}</label>
-            <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}">
+            <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}" required>
         </div>
         {% endif %}
 

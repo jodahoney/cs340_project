@@ -8,27 +8,27 @@
 <form id="editAirplane" action="{{ url_for('edit_airplane', id=data[0].TailNumber) }}" method="post">
   <div class="form-group">
     <label for=Make> Make: Current = {{ data[0].Make}}</label>
-    <input type="text" class="form-control" id="Make" name="Make" placeholder="Enter Make">
+    <input type="text" class="form-control" id="Make" name="Make" placeholder="Enter Make" required>
   </div>
   <div class="form-group">
     <label for=Model> Model: Current = {{ data[0].Model}}</label>
-    <input type="text" class="form-control" id="Model" name="Model" placeholder="Enter Model">
+    <input type="text" class="form-control" id="Model" name="Model" placeholder="Enter Model" required>
   </div>
   <div class="form-group">
     <label for=Range> Range: Current = {{ data[0].Range}}</label>
-    <input type="number" class="form-control" id="Range" name="Range" placeholder="Enter Range">
+    <input type="number" class="form-control" id="Range" name="Range" placeholder="Enter Range" required>
   </div>
   <div class="form-group">
-    <label for=FuelCapacity> FuelCapacity: Current = {{ data[0].FuelCapacity}}</label>
-    <input type="number" class="form-control" id="FuelCapacity" name="FuelCapacity" placeholder="Enter FuelCapacity">
+    <label for=FuelCapacity> Fuel Capacity: Current = {{ data[0].FuelCapacity}}</label>
+    <input type="number" class="form-control" id="FuelCapacity" name="FuelCapacity" placeholder="Enter Fuel Capacity" required>
   </div>
   <div class="form-group">
-    <label for=LastMaintenancePerformed> LastMaintenancePerformed: Current = {{ data[0].LastMaintenancePerformed}}</label>
-    <input type="date" class="form-control" id="LastMaintenancePerformed" name="LastMaintenancePerformed" placeholder="Enter LastMaintenancePerformed">
+    <label for=LastMaintenancePerformed> Last Maintenance Performed: Current = {{ data[0].LastMaintenancePerformed}}</label>
+    <input type="date" class="form-control" id="LastMaintenancePerformed" name="LastMaintenancePerformed" placeholder="Enter Last Maintenance Performed" required>
   </div>
   <div class="form-group">
-    <label for=MaintenanceFrequency> MaintenanceFrequency: Current = {{ data[0].MaintenanceFrequency}}</label>
-    <input type="number" class="form-control" id="MaintenanceFrequency" name="MaintenanceFrequency" placeholder="Enter MaintenanceFrequency">
+    <label for=MaintenanceFrequency> Maintenance Frequency: Current = {{ data[0].MaintenanceFrequency}}</label>
+    <input type="number" class="form-control" id="MaintenanceFrequency" name="MaintenanceFrequency" placeholder="Enter Maintenance Frequency" required>
   </div>
 
   <input type="submit" name="Edit_Airplane" value="Edit Airplane" class="btn btn-primary">

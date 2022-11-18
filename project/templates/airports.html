@@ -51,7 +51,7 @@
         {% for value in data[0] %}
             <div class="form-group">
                 <label for={{value}}>{{value}}</label>
-                <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}">
+                <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}" required>
             </div>
     
         {% endfor %}
