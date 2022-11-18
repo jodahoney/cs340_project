@@ -1,136 +1,136 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Orcas Air - Flights{% endblock %}</h1>
+  <h1>{% block title %}Orcas Air Flights{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
 
-  <p>
-    Flights that are available from Orcas Air.
-  </p>
 
-  <h3>Search for flights by destination:</h3>
-
-  <table class="table">
-    <select class="form-select">
-      <option selected></option>
-      <option value="PDX">Portland</option>
-      <option value="SEA">Seattle</option>
-    </select>
-  </table>
-
-
-  <table class="table">
+<table class="table">
     <thead class="thead-dark">
-      <tr>
+    <tr>
+        <th scope="col">Flight ID</th>
         <th scope="col">Origin</th>
         <th scope="col">Destination</th>
         <th scope="col">Departure</th>
         <th scope="col">Arrival</th>
-        <th scope="col">FlightDuration</th>
+        <th scope="col">Flight Duration</th>
         <th scope="col">Pilot</th>
         <th scope="col">Copilot</th>
         <th scope="col">Aircraft</th>
         <th scope="col">Customers</th>
         <th scope="col">Edit|Delete</th>
-      </tr>
-    </thead>
+    </tr>
     <tbody>
-      <tr>
-        <th scope="row">SEA</th>
-        <td>PDX</td>
-        <td>2022/04/22 21:50:25</td>
-        <td>2022/04/22 22:50:25</td>
-        <td>60</td>
-        <td>Steve Morton</td>
-        <td>John Woodward</td>
-        <td>NB3RF</td>
-        <td>
-          John Smith,
-          James Polk,
-          Laura Croft
-        </td>
-        <td>
-          <i class="fa-solid fa-pen-to-square"></i>
-          |
-          <i class="fa-solid fa-delete-left"></i>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 
-  <form>
-    <div class="form-group">
-      <label for="originInput">Origin</label>
-      <select class="form-control" id="originInput">
-        <option>Seattle-Tacoma International Airport</option>
-        <option>Portland International Airport</option>
-      </select> 
-    </div>
-    <div class="form-group">
-      <label for="destinationInput">Destination</label>
-      <select class="form-control" id="destinationInput">
-        <option>Seattle-Tacoma International Airport</option>
-        <option>Portland International Airport</option>
-      </select> 
-    </div>
-    <div class="form-group">
-      <label for="departureInput">Departure</label>
-      <input type="datetime" class="form-control" id="departureInput" placeholder="Enter Departure">
-    </div>
-    <div class="form-group">
-      <label for="arrivalInput">Arrival</label>
-      <input type="datetime" class="form-control" id="arrivalInput" placeholder="Enter Arrival">
-    </div>
-    <div class="form-group">
-      <label for="flightDurationInput">Flight Duration</label>
-      <input type="number" class="form-control" id="flightDurationInput" placeholder="Enter Flight Duration">
-    </div>
-    <div class="form-group">
-      <label for="pilotInput">Pilot</label>
-      <select class="form-control" id="pilotInput">
-        <option>Steve Morton</option>
-        <option>John Woodward</option>
-      </select> 
-    </div>
-    <div class="form-group">
-      <label for="copilotInput">CoPilot</label>
-      <select class="form-control" id="copilotInput">
-        <option>Steve Morton</option>
-        <option>John Woodward</option>
-      </select> 
-    </div>
-    <div class="form-group">
-      <label for="aircraftInput">Aircraft</label>
-      <select class="form-control" id="aircraftInput">
-        <option>NB3RF</option>
-      </select> 
-    </div>
-  
-    <div class="form-group">
-      <label for="customerAdd">Add Customers:</label>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
-        <label class="form-check-label" for="flexCheckDefault">
-          John Smith
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="2" id="flexCheckDefault">
-        <label class="form-check-label" for="flexCheckDefault">
-          James Polk
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="3" id="flexCheckDefault">
-        <label class="form-check-label" for="flexCheckDefault">
-          Laura Croft
-        </label>
+    {% for item in data %}
+    <tr>
+        <td>{{ item.FlightID }}</td>
+        <td>{{ item.Origin }}</td>
+        <td>{{ item.Destination }}</td>
+        <td>{{ item.Departure }}</td>
+        <td>{{ item.Arrival }}</td>
+        <td>{{ item.FlightDuration }}</td>
+        <!-- TODO: replace pilot id w/ pilot names -->
+        <td>
+          {{ pilot_data[item.Pilot - 1].FirstName }},
+          {{ pilot_data[item.Pilot - 1].LastName }}
+        </td>
+        <td>
+          {{ pilot_data[item.CoPilot - 1].FirstName }},
+          {{ pilot_data[item.CoPilot - 1].LastName }}
+        </td>
+        <td>{{ item.Aircraft }}</td>
+        <td><a href="{{ url_for('flightsCustomers', id=item.FlightID) }}">View Customers</a></td>
+        <td>
+            <a href="{{ url_for('edit_flight', id=item.FlightID) }}">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+            |
+            <a href="{{ url_for('delete_flight', id=item.FlightID) }}">
+                <i class="fa-solid fa-delete-left"></i>
+            </a>
+            
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+
+    <h4>Add a New Flight:</h4>
+
+    <!-- Selects for Origin and Destination -->
+    <form id="insertFlight" action="{{ url_for('flights') }}" method="post">
+      <div class="row">
+        <div class="form-group col" >
+          <label for="origin-select">Origin</label>
+          <select class="form-select" name="origin-select">
+            {% for airport in airport_data %}
+            <option value={{airport.AirportID}}>{{airport.AirportID}}, {{airport.Name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group col">
+          <label for="destination-select">Destination</label>
+          <select class="form-select" name="destination-select">
+            {% for airport in airport_data %}
+            <option value={{airport.AirportID}}>{{airport.AirportID}}, {{airport.Name}}</option>
+            {% endfor %}
+          </select>
+        </div>
       </div>
       
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+      {% for value in data[0] %}
+        {% if value not in  ["FlightID", "Origin", "Destination", "Pilot", "CoPilot", "Aircraft"] %}
+          <div class="form-group">
+              <label for={{value}}>{{value}}</label>
+              <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}">
+          </div>
+        {% endif %}  
+      {% endfor %}
 
+      <!-- TODO: Make sure the same pilot isn't selected for pilot and copilot -->
+      <div class="row">
+        <div class="form-group col">
+          <label for="pilot-select">Pilot</label>
+          <select class="form-select" name="pilot-select">
+            {% for pilot in pilot_data %}
+            <option value={{pilot.PilotID}}>{{pilot.FirstName}}, {{pilot.LastName}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group col">
+          <label for="copilot-select">CoPilot</label>
+          <select class="form-select" name="copilot-select">
+            {% for pilot in pilot_data %}
+            <option value={{pilot.PilotID}}>{{pilot.FirstName}}, {{pilot.LastName}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      
+
+      <!-- Aircraft Select-->
+      <div class="form-group">
+        <label for="aircraft-select">Aircraft</label>
+        <select class="form-select" name="aircraft-select">
+          {% for aircraft in aircraft_data %}
+          <option value={{aircraft.TailNumber}}>{{aircraft.TailNumber}}: {{aircraft.Make}}, {{aircraft.Model}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+
+
+      <!-- Customer Select -->
+      <label for="customer-select">Add Customers:</label><br>
+      <select class="form-select" multiple id="customer-select" name="customer-select">
+        {% for customer in customer_data %}
+          <option value={{customer.CustomerID}}>{{customer.FirstName}}, {{customer.LastName}}</option>
+        {% endfor %}
+      </select>
+      
+      <br><br>
+      <input type="submit" name="Add_Flight" value="Add Flight" class="btn btn-primary">
+    </form>
 {% endblock %}
