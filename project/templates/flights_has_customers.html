@@ -20,14 +20,16 @@
       </tr>
     </thead>
     <tbody>
-
       {% for item in data %}
         <tr>
             <td>{{ item.Flights_FlightID }}</td>
             <td>{{ item.Customers_CustomerID }}</td>
             <td>
-              {{ customer_data[item.Customers_CustomerID - 1].fname }}, 
-              {{ customer_data[item.Customers_CustomerID - 1].lname }}
+              {% for customer in customer_data %}
+                {% if customer.Customers_CustomerID == item.Customers_CustomerID %}
+                  {{ customer.fname }}, {{ customer.lname }}
+                {% endif %}
+              {% endfor %}
             </td>
             <td>
                 <a href="{{ url_for('edit_flight', id=item.Flights_FlightID) }}">

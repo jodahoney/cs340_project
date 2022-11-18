@@ -15,15 +15,17 @@
     <tr>
         <!-- Iterate through each key in the first entry to get the
         column name -->
-        {% for key in data[0].keys() %}
+        {% if data %}
+          {% for key in data[0].keys() %}
 
-        <!-- Create a <th> tag with the key inside of it, this will be
-        our header row -->
-        <th scope="col">{{ key }}</th>
+          <!-- Create a <th> tag with the key inside of it, this will be
+          our header row -->
+          <th scope="col">{{ key }}</th>
 
-        <!-- End of this for loop -->
-        {% endfor %}
-        <th scope="col">Edit|Delete</th>
+          <!-- End of this for loop -->
+          {% endfor %}
+          <th scope="col">Edit|Delete</th>
+        {% endif %}
     </tr>
     <tbody>
 
