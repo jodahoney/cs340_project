@@ -192,19 +192,29 @@ def flights():
             # assuming no null inputs
             query = "INSERT INTO Flights \
                 (Origin, Destination, Departure, Arrival, FlightDuration, Pilot, CoPilot, Aircraft) \
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s) \
+                RETURNING FlightID;"
             cursor = db.execute_query(
                 db_connection=db_connection, 
                 query=query, 
                 query_params=(Origin, Destination, Departure, Arrival, FlightDuration, Pilot, CoPilot, Aircraft)
                 )
+            results = cursor.fetchall()
+            flightid = results[0]['FlightID']
+            print(Customers)
 
             # If they provided customers to book, add them to the flight
             if Customers:
-                # Add to customers table
-
-
-            results = cursor.fetchall()
+                for customerid in Customers:
+                    # Add to flights_has_customers table
+                    query = "INSERT INTO Flights_has_Customers \
+                        (Flights_FlightID, Customers_CustomerID) \
+                        VALUES (%s, %s);"
+                    cursor = db.execute_query(
+                        db_connection=db_connection,
+                        query=query,
+                        query_params=(flightid, customerid)
+                    )
             return redirect("/flights")
 
     # Grab Flights data so we send it to our template to display
@@ -251,10 +261,15 @@ def flights():
 # route for delete functionality, deleting a flight
 @app.route("/delete-flight/<int:id>")
 def delete_flight(id):
-    # mySQL query to delete the person with our passed id
+
+    # delete the flight from the flights table
     query = "DELETE FROM Flights WHERE FlightID = '%s';" % (id)
     cursor = db.execute_query(db_connection=db_connection, query=query)
-    data = cursor.fetchall()
+    
+    # remove all flight-customer relationships from intersection
+    query2 = "DELETE FROM Flights_has_Customers \
+        WHERE Flights_FlightID = '%s';" % (id)
+    cursor = db.execute_query(db_connection=db_connection, query=query2)
 
     # redirect back to airport page
     return redirect("/flights")
@@ -442,12 +457,29 @@ def edit_customer(id):
             return redirect("/customers")
 
 # Flights_has_customers
-@app.route('/flights-customers')
+@app.route('/flights-customers', methods=["POST", "GET"])
 def flightsCustomers():
+    if request.method == "GET":
+        query = "SELECT * FROM Flights_has_Customers;"
+        cursor = db.execute_query(db_connection=db_connection, query=query)
+        data = cursor.fetchall()
+
+        query2 = "SELECT Customers_CustomerID, \
+            Customers.FirstName AS fname, Customers.LastName AS lname \
+            FROM Flights_has_Customers \
+            INNER JOIN Customers \
+            ON Flights_has_Customers.Customers_CustomerID = Customers.CustomerID  \
+            ;"
+        cursor = db.execute_query(db_connection=db_connection, query=query2)
+        customer_data = cursor.fetchall()
+
+        # render edit_people page passing our query data and homeworld data to the edit_people template
+        return render_template("flights_has_customers.html", data=data, customer_data=customer_data)
+    
     return render_template('flights_has_customers.html')
 
 # TODO:
-@app.route('/flights-customers/<int:id>')
+@app.route('/flights-customers/<int:id>', methods=["POST", "GET"])
 def indFlightsCustomers():
     return render_template('ind_flights_has_customers.html')
 
