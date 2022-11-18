@@ -7,9 +7,10 @@
 {% block content %}
 
 
-<table class="table"e>
+<table class="table">
     <thead class="thead-dark">
     <tr>
+        <th scope="col">Flight ID</th>
         <th scope="col">Origin</th>
         <th scope="col">Destination</th>
         <th scope="col">Departure</th>
@@ -25,12 +26,13 @@
 
     {% for item in data %}
     <tr>
-        <!-- Then iterate through every key in the current person dictionary -->
+        <td>{{ item.FlightID }}</td>
         <td>{{ item.Origin }}</td>
         <td>{{ item.Destination }}</td>
         <td>{{ item.Departure }}</td>
         <td>{{ item.Arrival }}</td>
         <td>{{ item.FlightDuration }}</td>
+        <!-- TODO: replace pilot id w/ pilot names -->
         <td>{{ item.Pilot }}</td>
         <td>{{ item.CoPilot }}</td>
         <td>{{ item.Aircraft }}</td>
