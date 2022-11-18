@@ -33,8 +33,14 @@
         <td>{{ item.Arrival }}</td>
         <td>{{ item.FlightDuration }}</td>
         <!-- TODO: replace pilot id w/ pilot names -->
-        <td>{{ item.Pilot }}</td>
-        <td>{{ item.CoPilot }}</td>
+        <td>
+          {{ pilot_data[item.Pilot - 1].FirstName }},
+          {{ pilot_data[item.Pilot - 1].LastName }}
+        </td>
+        <td>
+          {{ pilot_data[item.CoPilot - 1].FirstName }},
+          {{ pilot_data[item.CoPilot - 1].LastName }}
+        </td>
         <td>{{ item.Aircraft }}</td>
         <td><a href="{{ url_for('flightsCustomers', id=item.FlightID) }}">View Customers</a></td>
         <td>
