@@ -80,14 +80,16 @@
         </div>
       </div>
       
-      {% for value in data[0] %}
-        {% if value not in  ["FlightID", "Origin", "Destination", "Pilot", "CoPilot", "Aircraft"] %}
-          <div class="form-group">
-              <label for={{value}}>{{value}}</label>
-              <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}">
-          </div>
-        {% endif %}  
-      {% endfor %}
+      <div class="row">
+        <div class="form-group col">
+          <label for="Departure">Departure</label>
+          <input type="datetime-local" class="form-control" id="Departure" name="Departure" placeholder="Enter Departure">
+        </div>
+        <div class="form-group col">
+          <label for="Arrival">Arrival</label>
+          <input type="datetime-local" class="form-control" id="Arrival" name="Arrival" placeholder="Enter Arrival">
+        </div>
+      </div>
 
       <!-- TODO: Make sure the same pilot isn't selected for pilot and copilot -->
       <div class="row">

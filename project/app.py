@@ -1,5 +1,6 @@
 from flask import Flask, render_template, json, request, redirect
 import database.db_connector as db
+import datetime
 import os
 
 app = Flask(__name__)
@@ -183,11 +184,18 @@ def flights():
             Destination = request.form["destination-select"]
             Departure = request.form["Departure"]
             Arrival = request.form["Arrival"]
-            FlightDuration = request.form["FlightDuration"]
             Pilot = request.form["pilot-select"]
             CoPilot = request.form["copilot-select"]
             Aircraft = request.form["aircraft-select"]
             Customers = request.form.getlist("customer-select")
+
+            
+            # Calculate travel time
+            arrival_datetime = datetime.datetime.strptime(Arrival,"%Y-%m-%dT%H:%M")
+            departure_datetime = datetime.datetime.strptime(Departure,"%Y-%m-%dT%H:%M")
+
+            time_delta = arrival_datetime - departure_datetime
+            FlightDuration = (time_delta.days * 24) + (time_delta.seconds // 60)
         
             # assuming no null inputs
             query = "INSERT INTO Flights \
