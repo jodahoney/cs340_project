@@ -11,6 +11,7 @@ app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 """
 TODO:
 - flights has customers create, update, delete
+- change customer selection from current method to checkbox
 - make sure that all of the update forms have the pre filled in information 
     as the value for text fields (like in flights)
 - add a search / filter
@@ -293,6 +294,12 @@ def edit_flight(id):
     if request.method == "GET":
         
         query = "SELECT * FROM Flights WHERE FlightID = '%s';" % (id)
+        cursor = db.execute_query(db_connection=db_connection, query=query)
+        data = cursor.fetchall()
+
+        query2 = "SELECT CustomerID, FirstName, LastName FROM Customers;"
+        cursor = db.execute_query(db_connection=db_connection, query=query2)
+        customer_data = cursor.fetchall()
 
         query3 = "SELECT AirportID, Name FROM Airports;"
         cursor = db.execute_query(db_connection=db_connection, query=query3)
@@ -306,15 +313,19 @@ def edit_flight(id):
         cursor = db.execute_query(db_connection=db_connection, query=query5)
         aircraft_data = cursor.fetchall()
 
-        cursor = db.execute_query(db_connection=db_connection, query=query)
-        data = cursor.fetchall()
+        query6 = "SELECT Customers_CustomerID FROM Flights_has_Customers WHERE Flights_FlightID = %s;" % (id)
+        cursor = db.execute_query(db_connection=db_connection, query=query6)
+        flight_has_cust_data = cursor.fetchall()
+        # change dictionary to list of customer ID's related to flightID
+        flight_has_cust_data = [line['Customers_CustomerID'] for line in flight_has_cust_data]
 
         return render_template("edit_flight.html", 
             data=data, 
-            # customer_data=customer_data, 
+            customer_data=customer_data, 
             airport_data=airport_data,
             pilot_data=pilot_data,
-            aircraft_data=aircraft_data)
+            aircraft_data=aircraft_data,
+            flight_has_cust_data=flight_has_cust_data)
 
     if request.method == "POST":
         if request.form.get("Edit_Flight"):
@@ -327,6 +338,7 @@ def edit_flight(id):
             Pilot = request.form["pilot-select"]
             CoPilot = request.form["copilot-select"]
             Aircraft = request.form["aircraft-select"]
+            Customers = request.form.getlist("customer-check")
 
             FlightDuration = calculate_flight_time(Arrival, Departure)
         
@@ -339,7 +351,35 @@ def edit_flight(id):
             )
             data = cursor.fetchall()
 
+            if Customers:
+                # TODO: Update customers and intersection table
+
+                # if its the same customers, make no change
+
+
+                # if there is a new customer added, then add to intersection and everything
+                for customerid in Customers:
+                    pass
+                pass
+
+                # if they removed customers, then update the tables
+                
+            
             return redirect("/flights")
+
+            # From the create step
+            # if Customers:
+            #     for customerid in Customers:
+            #         # Add to flights_has_customers table
+            #         query = "INSERT INTO Flights_has_Customers \
+            #             (Flights_FlightID, Customers_CustomerID) \
+            #             VALUES (%s, %s);"
+            #         cursor = db.execute_query(
+            #             db_connection=db_connection,
+            #             query=query,
+            #             query_params=(flightid, customerid)
+            #         )
+            # return redirect("/flights")
 
 
 @app.route("/pilots", methods=["POST", "GET"])
@@ -473,6 +513,20 @@ def edit_customer(id):
             return redirect("/customers")
 
 
+# OKAY SO FLIGHT HAS CUSTOMERS OPERATION
+"""
+- Adding customers to a flight is done during the flight creation step. 
+    - A flight can be created without customers (Which is our nullable foregin key relationship)
+- Updating a Flight / Customer relationship happens in the Edit Flights menu.
+    - this means the edit button in the flights_has_customers page should take you to the flight edit page for that FlightID
+    - So the actual adding and removing customers from a flight is supposed to happen in the Flights page
+- The search functions will be added to the Flights_has_Customers table
+    - search by flight ID or customer ID to see what flights they are on or who is on the flight searched
+        - I think that the initial searching by flight ID I already have implemented w/ the button, just need to change that to form
+- You can remove a customer from a flight by simply clicking the delete icon from the flights_has_customers table
+    - THIS SHOULDN'T DELETE THE WHOLE FLIGHT LIKE IT DOES RN
+"""
+
 @app.route('/flights-customers', methods=["POST", "GET"])
 def flightsCustomers():
     if request.method == "GET":
@@ -493,20 +547,22 @@ def flightsCustomers():
     
     return render_template('flights_has_customers.html')
 
-# TODO:
+# TODO: Make table w/ more information
 @app.route('/flights-customers/<int:id>', methods=["POST", "GET"])
 def indFlightsCustomers(id):
     if request.method == "GET":
 
-        # Need it to be by flight id
         query = "SELECT * FROM Flights_has_Customers WHERE Flights_FlightID = '%s';" % (id)
         cursor = db.execute_query(db_connection=db_connection, query=query)
         data = cursor.fetchall()
 
+
+        # get flight information to give flight detail w/ customers
+
         return render_template("ind_flights_has_customers.html", data=data)
 
-
-    return render_template('ind_flights_has_customers.html')
+    if request.method == "POST":
+        return render_template('ind_flights_has_customers.html')
 
 # Listener
 if __name__ == "__main__":

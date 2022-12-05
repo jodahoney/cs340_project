@@ -94,6 +94,27 @@
       </select>
     </div>
     
+     <!-- Customer Select -->
+     <label for="customer-select">Edit Customers (Current customers are checked by default)</label>
+
+     {% for customer in customer_data %}
+      {% if customer.CustomerID in flight_has_cust_data %} 
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="{{customer.CustomerID}}" id="{{customer.CustomerID}}" checked>
+          <label class="form-check-label" for="customer.CustomerID">
+            {{customer.FirstName}}, {{customer.LastName}}
+          </label>
+        </div>
+      {% else %}
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="{{customer.CustomerID}}" id="{{customer.CustomerID}}">
+          <label class="form-check-label" for="customer.CustomerID">
+            {{customer.FirstName}}, {{customer.LastName}}
+          </label>
+        </div>
+      {% endif %}
+     {% endfor %}
+
     <br><br>
     <input type="submit" name="Edit_Flight" value="Edit Flight" class="btn btn-primary">
   </form>
