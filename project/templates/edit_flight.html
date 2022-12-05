@@ -6,16 +6,95 @@
 
 {% block content %}
 <form id="editFlight" action="{{ url_for('edit_flight', id=data[0].FlightID) }}" method="post">
-    {% for value in data[0] %}
-        {% if value != "FlightID" %}
-        <div class="form-group">
-            <label for={{value}}>{{value}}: Current = {{ data[0][value] }}</label>
-            <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}">
-        </div>
-        {% endif %}
+    <!-- Origin and Destination -->
+    <div class="row">
+      <div class="form-group col" >
+        <label for="origin-select">Origin: Current = {{ data[0]['Origin'] }}</label>
+        <select class="form-select" name="origin-select">
+          {% for airport in airport_data %}
+            {% if airport.AirportID == data[0]['Origin'] %} 
+              <option value={{airport.AirportID}} selected>{{airport.AirportID}}, {{airport.Name}}</option>
+            {% else %} 
+              <option value={{airport.AirportID}}>{{airport.AirportID}}, {{airport.Name}}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group col">
+        <label for="destination-select">Destination: Current = {{ data[0]['Destination'] }}</label>
+        <select class="form-select" name="destination-select">
+          {% for airport in airport_data %}
+            {% if airport.AirportID == data[0]['Destination'] %} 
+              <option value={{airport.AirportID}} selected>{{airport.AirportID}}, {{airport.Name}}</option>
+            {% else %} 
+            <option value={{airport.AirportID}}>{{airport.AirportID}}, {{airport.Name}}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="form-group col">
+        <label for="Departure">Departure: Current = {{ data[0]['Arrival'] }}</label>
+        <input type="datetime-local" class="form-control" id="Departure" name="Departure" placeholder="Enter Departure" value="{{data[0]['Departure']}}">
+      </div>
+      <div class="form-group col">
+        <label for="Arrival">Arrival: Current = {{data[0]['Arrival']}}</label>
+        <input type="datetime-local" class="form-control" id="Arrival" name="Arrival" placeholder="Enter Arrival" value="{{data[0]['Arrival']}}">
+      </div>
+    </div>
 
-    {% endfor %}
-
+    <div class="row">
+      <div class="form-group col">
+        {% for pilot in pilot_data %}
+            {% if pilot.PilotID == data[0]['Pilot'] %}
+            <label for="pilot-select">Pilot: Current = {{ pilot.FirstName }}, {{ pilot.LastName }} </label>
+            {% endif %}
+        {% endfor %}
+        <select class="form-select" name="pilot-select">
+          {% for pilot in pilot_data %}
+            {% if pilot.PilotID == data[0]['Pilot'] %}
+              <option value={{pilot.PilotID}} selected>{{pilot.FirstName}}, {{pilot.LastName}}</option>
+            {% else %} 
+              <option value={{pilot.PilotID}}>{{pilot.FirstName}}, {{pilot.LastName}}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group col">
+        {% for pilot in pilot_data %}
+          {% if pilot.PilotID == data[0]['CoPilot'] %}
+            <label for="copilot-select">CoPilot: Current = {{ pilot.FirstName }}, {{ pilot.LastName }} </label>
+          {% endif %}
+        {% endfor %}
+        <select class="form-select" name="copilot-select">
+          {% for pilot in pilot_data %}
+            {% if pilot.PilotID == data[0]['CoPilot'] %}
+              <option value={{pilot.PilotID}} selected>{{pilot.FirstName}}, {{pilot.LastName}}</option>
+            {% else %} 
+              <option value={{pilot.PilotID}}>{{pilot.FirstName}}, {{pilot.LastName}}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    
+    <!-- Aircraft Select-->
+    <div class="form-group">
+      <label for="aircraft-select">Aircraft: Current = {{ data[0]['Aircraft'] }}</label>
+      <select class="form-select" name="aircraft-select">
+        {% for aircraft in aircraft_data %}
+          {% if aircraft.TailNumber == data[0]['Aircraft'] %}
+            <option value={{aircraft.TailNumber}} selected>{{aircraft.TailNumber}}: {{aircraft.Make}}, {{aircraft.Model}}</option>
+          {% else %} 
+            <option value={{aircraft.TailNumber}}>{{aircraft.TailNumber}}: {{aircraft.Make}}, {{aircraft.Model}}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+    
+    <br><br>
     <input type="submit" name="Edit_Flight" value="Edit Flight" class="btn btn-primary">
   </form>
 {% endblock %}
