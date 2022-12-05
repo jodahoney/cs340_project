@@ -8,6 +8,31 @@ db_connection = db.connect_to_database()
 
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 
+"""
+TODO:
+- flights has customers create, update, delete
+- make sure that all of the update forms have the pre filled in information 
+    as the value for text fields (like in flights)
+- add a search / filter
+    - needs to also have the ability to search using text or filter using a dynamically populated list of 
+        properties.
+- code citations
+    - In the code, you have to mention 1. the full details of the citation scope (e.g. module, function or line), 
+        2. if the code is copied, adapted, or based, and 3. the source (URL). I don't think it's required in the README, 
+        but it's probably best to mention the node starter app and any sources you used. 
+- Note that the nullable foreign key that we have is that you can create a flight without customers.
+- In a one-to-many relationship, you should be able to set the foreign key value to NULL using UPDATE, 
+    that removes the relationship. In case none of the one-to-many relationships in your database has 
+    partial participation, you would need to change that to make sure they can have NULL values.
+- In a many-to-many relationship, one should be able to delete a row from the intersection table without creating
+     a data anomaly in the related tables. If you implement DELETE functionality on at least ( 1 ) many - 
+     to - many relationship table , such that the rows in the relevant entity tables are not impacted , 
+     that is sufficient.
+- To continue the example from above, if you have 5 tables in your schema, then at a minimum, we expect you to 
+    implement 5 SELECTs, 5 INSERTs, 2 UPDATEs (M:M 1 NULLable relationship), 1 DELETE (M:M), and 1 Search/Dynamic 
+    for a total of 14 functions. 
+"""
+
 def calculate_flight_time(arrival, departure):
     """
     Accepts the string output by the HTML datetime-local input form and converts
@@ -25,6 +50,7 @@ def calculate_flight_time(arrival, departure):
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route("/airports", methods=["POST", "GET"])
 def airports():
@@ -54,6 +80,7 @@ def airports():
 
         return render_template("airports.html", data=data)
 
+
 @app.route("/delete-airport/<string:id>")
 def delete_airport(id):
     query = "DELETE FROM Airports WHERE AirportID = '%s';" % (id)
@@ -62,6 +89,7 @@ def delete_airport(id):
 
     # redirect back to airport page
     return redirect("/airports")
+
 
 @app.route("/edit-airport/<string:id>", methods=["POST", "GET"])
 def edit_airport(id):
@@ -85,7 +113,7 @@ def edit_airport(id):
             
             return redirect("/airports")
 
-# Airplanes
+
 @app.route("/airplanes", methods=["POST", "GET"])
 def airplanes():
 
@@ -118,7 +146,6 @@ def airplanes():
         return render_template("airplanes.html", data=data)
 
 
-# route for delete functionality, deleting an airplane
 @app.route("/delete-airplane/<string:id>")
 def delete_airplane(id):
     query = "DELETE FROM Airplanes WHERE TailNumber = '%s';" % (id)
@@ -129,7 +156,6 @@ def delete_airplane(id):
     return redirect("/airplanes")
 
 
-# route for edit functionality, updating the attributes of an airplane
 @app.route("/edit-airplane/<string:id>", methods=["POST", "GET"])
 def edit_airplane(id):
     if request.method == "GET":
@@ -154,8 +180,8 @@ def edit_airplane(id):
             print(data)
  
             return redirect("/airplanes")
-            
-# Flights
+
+
 @app.route("/flights", methods=["POST", "GET"])
 def flights():
 
@@ -246,7 +272,6 @@ def flights():
             )
 
 
-# route for delete functionality, deleting a flight
 @app.route("/delete-flight/<int:id>")
 def delete_flight(id):
 
@@ -313,10 +338,10 @@ def edit_flight(id):
                 query_params=(Origin, Destination, Departure, Arrival, FlightDuration, Pilot, CoPilot, Aircraft, id)
             )
             data = cursor.fetchall()
-            
+
             return redirect("/flights")
 
-# Pilots
+
 @app.route("/pilots", methods=["POST", "GET"])
 def pilots():
 
@@ -352,6 +377,7 @@ def delete_pilot(id):
 
     return redirect("/pilots")
 
+
 @app.route("/edit-pilot/<string:id>", methods=["POST", "GET"])
 def edit_pilot(id):
     if request.method == "GET":
@@ -375,7 +401,7 @@ def edit_pilot(id):
             
             return redirect("/pilots")
 
-# Customers
+
 @app.route("/customers", methods=["POST", "GET"])
 def customers():
 
@@ -407,6 +433,7 @@ def customers():
         data = cursor.fetchall()
 
         return render_template("customers.html", data=data)
+
 
 @app.route("/delete-customer/<string:id>")
 def delete_customer(id):
@@ -445,7 +472,7 @@ def edit_customer(id):
             
             return redirect("/customers")
 
-# Flights_has_customers
+
 @app.route('/flights-customers', methods=["POST", "GET"])
 def flightsCustomers():
     if request.method == "GET":
@@ -468,7 +495,17 @@ def flightsCustomers():
 
 # TODO:
 @app.route('/flights-customers/<int:id>', methods=["POST", "GET"])
-def indFlightsCustomers():
+def indFlightsCustomers(id):
+    if request.method == "GET":
+
+        # Need it to be by flight id
+        query = "SELECT * FROM Flights_has_Customers WHERE Flights_FlightID = '%s';" % (id)
+        cursor = db.execute_query(db_connection=db_connection, query=query)
+        data = cursor.fetchall()
+
+        return render_template("ind_flights_has_customers.html", data=data)
+
+
     return render_template('ind_flights_has_customers.html')
 
 # Listener

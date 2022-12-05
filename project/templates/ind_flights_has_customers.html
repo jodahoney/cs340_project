@@ -6,16 +6,9 @@
 
 {% block content %}
 
-  <p>
-    Flights that are available from Orcas Air and their respective customers.
-  </p>
-
-  
-
-  <br/>
-  <br/>
-  <p>Note: Values are inserted to this table when insertions are made to the Flights
-    and Customers tables.
-  </p>
+  {% for value in data %} 
+    {{ value }}
+      <br> 
+  {% endfor %}
 
 {% endblock %}
