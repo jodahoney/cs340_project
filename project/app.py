@@ -207,7 +207,7 @@ def flights():
             Pilot = request.form["pilot-select"]
             CoPilot = request.form["copilot-select"]
             Aircraft = request.form["aircraft-select"]
-            Customers = request.form.getlist("customer-select")
+            Customers = request.form.getlist("customer-check")
 
             
             # Calculate travel time
@@ -225,7 +225,8 @@ def flights():
                 )
             results = cursor.fetchall()
             flightid = results[0]['FlightID']
-            print(Customers)
+
+
 
             # If they provided customers to book, add them to the flight
             if Customers:

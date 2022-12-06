@@ -125,12 +125,14 @@
 
 
       <!-- Customer Select -->
-      <label for="customer-select">Add Customers:</label><br>
-      <select class="form-select" multiple id="customer-select" name="customer-select">
-        {% for customer in customer_data %}
-          <option value={{customer.CustomerID}}>{{customer.FirstName}}, {{customer.LastName}}</option>
-        {% endfor %}
-      </select>
+      {% for customer in customer_data %}
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="{{customer.CustomerID}}" id="{{customer.CustomerID}}" name="customer-check">
+          <label class="form-check-label" for="customer.CustomerID">
+            {{customer.FirstName}}, {{customer.LastName}}
+          </label>
+        </div>
+     {% endfor %}
       
       <br><br>
       <input type="submit" name="Add_Flight" value="Add Flight" class="btn btn-primary">
