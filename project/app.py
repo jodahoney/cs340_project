@@ -10,9 +10,8 @@ app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 
 """
 TODO:
-- Individual flights page
-- make sure that all of the update forms have the pre filled in information 
-    as the value for text fields (like in flights)
+- flights has customers create, update, delete
+- change customer selection from current method to checkbox
 - add a search / filter
     - needs to also have the ability to search using text or filter using a dynamically populated list of 
         properties.
