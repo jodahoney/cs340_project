@@ -9,6 +9,8 @@
   <p>
     Flights that are available from Orcas Air and their respective customers.
   </p>
+  <br>
+  <h5>ToolTip: Click a Flight ID to filter customers by a specific flight!</h5>
 
   <table class="table">
     <thead class="thead-dark">
@@ -16,30 +18,26 @@
         <th scope="col">Flight ID</th>
         <th scope="col">Customer ID</th>
         <th scope="col">Customer Name</th>
-        <th scope="col">Edit|Delete</th>
+        <th scope="col">Edit Flight</th>
       </tr>
     </thead>
     <tbody>
       {% for item in data %}
         <tr>
-            <td><a href="{{ url_for('indFlightsCustomers', id=item.Flights_FlightID) }}">{{ item.Flights_FlightID }}</a></td>
+            <td><a href="{{ url_for('indFlightsCustomers', flight_id=item.Flights_FlightID) }}">{{ item.Flights_FlightID }}</a></td>
             <td>{{ item.Customers_CustomerID }}</td>
             <td>
               {% for customer in customer_data %}
-                {% if customer.Customers_CustomerID == item.Customers_CustomerID %}
-                  {{ customer.fname }}, {{ customer.lname }}
+                {% if customer.CustomerID == item.Customers_CustomerID %}
+                  {{ customer.FirstName }}, {{ customer.LastName }}
                 {% endif %}
               {% endfor %}
             </td>
             <td>
-                <a href="{{ url_for('indFlightsCustomers', id=item.Flights_FlightID) }}">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </a>
-                |
-                <a href="{{ url_for('delete_flight', id=item.Flights_FlightID) }}">
-                    <i class="fa-solid fa-delete-left"></i>
-                </a>
-                
+              <a href="{{ url_for('edit_flight', id=item.Flights_FlightID) }}">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+                         
             </td>
         </tr>
       {% endfor %}
@@ -48,6 +46,6 @@
 
   <br/>
   <br/>
-  <h5>TODO: Form to add customer to flight</h5>
+  <h5>Note: You can add/remove customers to/from flights in the flights page!</h5>
 
 {% endblock %}

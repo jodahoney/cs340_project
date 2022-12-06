@@ -42,7 +42,7 @@
           {{ pilot_data[item.CoPilot - 1].LastName }}
         </td>
         <td>{{ item.Aircraft }}</td>
-        <td><a href="{{ url_for('indFlightsCustomers', id=item.FlightID) }}">View Customers</a></td>
+        <td><a href="{{ url_for('indFlightsCustomers', flight_id=item.FlightID) }}">View Customers</a></td>
         <td>
             <a href="{{ url_for('edit_flight', id=item.FlightID) }}">
                 <i class="fa-solid fa-pen-to-square"></i>

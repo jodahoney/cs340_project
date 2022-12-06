@@ -5,10 +5,45 @@
 {% endblock %}
 
 {% block content %}
+  <br>
+  <h2>Customers for Flight {{ data[0].Flights_FlightID }}</h2>
 
-  {% for value in data %} 
-    {{ value }}
-      <br> 
-  {% endfor %}
+  
+  <h2>Flight Details:</h2>
+  <h5>{{ flight_data.Origin }} -> {{ flight_data.Destination }}: 
+    Departing at {{ flight_data.Departure }}, Arriving at {{ flight_data.Arrival }}</h5>
+  <br>
+  <h5>Customers on Flight:</h5>
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Flight ID</th>
+        <th scope="col">Customer ID</th>
+        <th scope="col">Customer Name</th>
+        <th scope="col">Edit Flight</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      {% for item in data %}
+        <tr>
+            <td>{{ item.Flights_FlightID }}</td>
+            <td>{{ item.Customers_CustomerID }}</td>
+            <td>
+              {% for customer in customer_data %}
+                {% if customer.CustomerID == item.Customers_CustomerID %}
+                  {{ customer.FirstName }}, {{ customer.LastName }}
+                {% endif %}
+              {% endfor %}
+            </td>
+            <td>
+              <a href="{{ url_for('edit_flight', id=item.Flights_FlightID) }}">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </a>
+            </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
 {% endblock %}

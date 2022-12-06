@@ -10,8 +10,7 @@ app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 
 """
 TODO:
-- flights has customers create, update, delete
-- change customer selection from current method to checkbox
+- Individual flights page
 - make sure that all of the update forms have the pre filled in information 
     as the value for text fields (like in flights)
 - add a search / filter
@@ -190,12 +189,8 @@ def flights():
 
     #TODO: 
     # - Add search feature to Flights page
-    # - Add checkbox to the flights page to add multiple customers
-    # - Make sure it is possible that a flight can be added without customers
-    #   - but that is the ONLY nullable option
     # - add in the filter functionality to flights w/ customers so you can search for
     #  that specific customer list based on click from flights or search in base page
-    # - add pilot name and copilot name to results table intead of id\
 
     # insert into the flights entity
     if request.method == "POST":
@@ -227,8 +222,6 @@ def flights():
                 )
             results = cursor.fetchall()
             flightid = results[0]['FlightID']
-
-
 
             # If they provided customers to book, add them to the flight
             if Customers:
@@ -521,16 +514,8 @@ def edit_customer(id):
             return redirect("/customers")
 
 
-# OKAY SO FLIGHT HAS CUSTOMERS OPERATION
 """
-- Adding customers to a flight is done during the flight creation step. 
-    - A flight can be created without customers (Which is our nullable foregin key relationship)
-- Updating a Flight / Customer relationship happens in the Edit Flights menu.
-    - this means the edit button in the flights_has_customers page should take you to the flight edit page for that FlightID
-    - So the actual adding and removing customers from a flight is supposed to happen in the Flights page
-- The search functions will be added to the Flights_has_Customers table
-    - search by flight ID or customer ID to see what flights they are on or who is on the flight searched
-        - I think that the initial searching by flight ID I already have implemented w/ the button, just need to change that to form
+- add a textual from search to search flights by flightID
 - You can remove a customer from a flight by simply clicking the delete icon from the flights_has_customers table
     - THIS SHOULDN'T DELETE THE WHOLE FLIGHT LIKE IT DOES RN
 """
@@ -542,12 +527,7 @@ def flightsCustomers():
         cursor = db.execute_query(db_connection=db_connection, query=query)
         data = cursor.fetchall()
 
-        query2 = "SELECT Customers_CustomerID, \
-            Customers.FirstName AS fname, Customers.LastName AS lname \
-            FROM Flights_has_Customers \
-            INNER JOIN Customers \
-            ON Flights_has_Customers.Customers_CustomerID = Customers.CustomerID  \
-            ;"
+        query2 = "SELECT * FROM Customers;"
         cursor = db.execute_query(db_connection=db_connection, query=query2)
         customer_data = cursor.fetchall()
 
@@ -555,22 +535,26 @@ def flightsCustomers():
     
     return render_template('flights_has_customers.html')
 
-# TODO: Make table w/ more information
-@app.route('/flights-customers/<int:id>', methods=["POST", "GET"])
-def indFlightsCustomers(id):
+@app.route('/ind-flights-customers/<int:flight_id>', methods=["POST", "GET"])
+def indFlightsCustomers(flight_id):
     if request.method == "GET":
 
-        query = "SELECT * FROM Flights_has_Customers WHERE Flights_FlightID = '%s';" % (id)
+        query = "SELECT * FROM Flights_has_Customers WHERE Flights_FlightID = '%s';" % (flight_id)
         cursor = db.execute_query(db_connection=db_connection, query=query)
         data = cursor.fetchall()
 
+        query2 = "SELECT * FROM Customers;"
+        cursor = db.execute_query(db_connection=db_connection, query=query2)
+        customer_data = cursor.fetchall()
 
-        # get flight information to give flight detail w/ customers
+        query3 = "SELECT * FROM Flights WHERE FlightID = '%s';" % (flight_id)
+        cursor = db.execute_query(db_connection=db_connection, query=query3)
+        flight_data = cursor.fetchone()
 
-        return render_template("ind_flights_has_customers.html", data=data)
-
-    if request.method == "POST":
-        return render_template('ind_flights_has_customers.html')
+        return render_template("ind_flights_has_customers.html", 
+            data=data, 
+            customer_data=customer_data,
+            flight_data=flight_data)
 
 # Listener
 if __name__ == "__main__":
