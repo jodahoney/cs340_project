@@ -129,11 +129,12 @@ def airplanes():
             air_range = request.form["Range"]
             fuel_capacity = request.form["FuelCapacity"]
             last_maintenance_performed = request.form["LastMaintenancePerformed"]
-            maintenance_frequency = request.form["MaintenanceFrequency"]
+            maintenance_frequency = request.form["MaintenanceFrequency"] 
+            next_maintenance_date = datetime.datetime.strptime(last_maintenance_performed, "%Y-%m-%d") + datetime.timedelta(days = int(maintenance_frequency))
         
             # assuming no null inputs
-            query = "INSERT INTO Airplanes (`TailNumber`, `Make`, `Model`, `Range`, `FuelCapacity`, `LastMaintenancePerformed`, `MaintenanceFrequency`) VALUES (%s, %s, %s, %s, %s, %s, %s);"
-            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(tail_number, make, model, air_range, fuel_capacity, last_maintenance_performed, maintenance_frequency))
+            query = "INSERT INTO Airplanes (`TailNumber`, `Make`, `Model`, `Range`, `FuelCapacity`, `LastMaintenancePerformed`, `MaintenanceFrequency`, `NextMaintenanceDate`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"
+            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(tail_number, make, model, air_range, fuel_capacity, last_maintenance_performed, maintenance_frequency, next_maintenance_date))
             results = cursor.fetchall()
 
             return redirect("/airplanes")
@@ -174,9 +175,10 @@ def edit_airplane(id):
             fuel_capacity = request.form["FuelCapacity"]
             last_maintenance_performed = request.form["LastMaintenancePerformed"]
             maintenance_frequency = request.form["MaintenanceFrequency"]
+            next_maintenance_date = datetime.datetime.strptime(last_maintenance_performed, "%Y-%m-%d") + datetime.timedelta(days = int(maintenance_frequency))
            
-            query = "UPDATE Airplanes SET Airplanes.Make = %s, Airplanes.Model = %s, Airplanes.Range = %s, Airplanes.FuelCapacity = %s, Airplanes.LastMaintenancePerformed = %s, Airplanes.MaintenanceFrequency = %s WHERE Airplanes.TailNumber = %s;"
-            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(make, model, range, fuel_capacity, last_maintenance_performed, maintenance_frequency, id))
+            query = "UPDATE Airplanes SET Airplanes.Make = %s, Airplanes.Model = %s, Airplanes.Range = %s, Airplanes.FuelCapacity = %s, Airplanes.LastMaintenancePerformed = %s, Airplanes.MaintenanceFrequency = %s, Airplanes.NextMaintenanceDate = %s WHERE Airplanes.TailNumber = %s;"
+            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(make, model, range, fuel_capacity, last_maintenance_performed, maintenance_frequency, next_maintenance_date, id))
             data = cursor.fetchall()
             print(data)
  
