@@ -2,6 +2,13 @@ import MySQLdb
 import os
 from dotenv import load_dotenv, find_dotenv
 
+"""
+Credit for this file goes to the osu-cs34-ecampus Flask-starter-app
+Their code was adapted.
+https://github.com/osu-cs340-ecampus/flask-starter-app#hosting-on-flip-servers-and-running-forever-via-gunicorn
+"""
+
+
 # Load our environment variables from the .env file in the root of our project.
 load_dotenv(find_dotenv())
 

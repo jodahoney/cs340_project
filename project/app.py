@@ -8,29 +8,6 @@ db_connection = db.connect_to_database()
 
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 
-"""
-TODO:
-- flights has customers create, update, delete
-- change customer selection from current method to checkbox
-- add a search / filter
-    - needs to also have the ability to search using text or filter using a dynamically populated list of 
-        properties.
-- code citations
-    - In the code, you have to mention 1. the full details of the citation scope (e.g. module, function or line), 
-        2. if the code is copied, adapted, or based, and 3. the source (URL). I don't think it's required in the README, 
-        but it's probably best to mention the node starter app and any sources you used. 
-- Note that the nullable foreign key that we have is that you can create a flight without customers.
-- In a one-to-many relationship, you should be able to set the foreign key value to NULL using UPDATE, 
-    that removes the relationship. In case none of the one-to-many relationships in your database has 
-    partial participation, you would need to change that to make sure they can have NULL values.
-- In a many-to-many relationship, one should be able to delete a row from the intersection table without creating
-     a data anomaly in the related tables. If you implement DELETE functionality on at least ( 1 ) many - 
-     to - many relationship table , such that the rows in the relevant entity tables are not impacted , 
-     that is sufficient.
-- To continue the example from above, if you have 5 tables in your schema, then at a minimum, we expect you to 
-    implement 5 SELECTs, 5 INSERTs, 2 UPDATEs (M:M 1 NULLable relationship), 1 DELETE (M:M), and 1 Search/Dynamic 
-    for a total of 14 functions. 
-"""
 
 def calculate_flight_time(arrival, departure):
     """
@@ -185,12 +162,6 @@ def edit_airplane(id):
 
 @app.route("/flights", methods=["POST", "GET"])
 def flights():
-
-    #TODO: 
-    # - Add search feature to Flights page
-    # - add in the filter functionality to flights w/ customers so you can search for
-    #  that specific customer list based on click from flights or search in base page
-
     # insert into the flights entity
     if request.method == "POST":
         # fire off if user presses the Add Flight button
@@ -512,12 +483,6 @@ def edit_customer(id):
             
             return redirect("/customers")
 
-
-"""
-- add a textual from search to search flights by flightID
-- You can remove a customer from a flight by simply clicking the delete icon from the flights_has_customers table
-    - THIS SHOULDN'T DELETE THE WHOLE FLIGHT LIKE IT DOES RN
-"""
 
 @app.route('/flights-customers', methods=["POST", "GET"])
 def flightsCustomers():
