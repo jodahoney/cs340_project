@@ -9,8 +9,8 @@
     {% for value in data[0] %}
         {% if value != "PilotID" %}
         <div class="form-group">
-            <label for={{value}}>{{value}}: Current = {{ data[0][value] }}</label>
-            <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}" required>
+            <label for={{value}}>{{value}}: Current = {{data[0][value]}}</label>
+            <input type="text" class="form-control" id="{{value}}" name="{{value}}" placeholder="Enter {{value}}" value={{data[0][value]}} required>
         </div>
         {% endif %}
 
