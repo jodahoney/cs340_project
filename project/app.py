@@ -351,35 +351,40 @@ def edit_flight(id):
             )
             data = cursor.fetchall()
 
-            if Customers:
-                # TODO: Update customers and intersection table
+            # Get current list of customers to compare with newest submission
+            query6 = "SELECT Customers_CustomerID FROM Flights_has_Customers WHERE Flights_FlightID = %s;" % (id)
+            cursor = db.execute_query(db_connection=db_connection, query=query6)
+            flight_has_cust_data = cursor.fetchall()
+            prev_cust_data = [line['Customers_CustomerID'] for line in flight_has_cust_data]
 
-                # if its the same customers, make no change
+            new_cust_data = list(map(int, Customers))
 
+            # if there is a change in the customers list
+            if new_cust_data != prev_cust_data:
+                # if they removed customers
+                if len(new_cust_data) < len(prev_cust_data):
+                    # remove the customers 
+                    prev_cust_set = set(prev_cust_data)
+                    removed_customers = [x for x in prev_cust_set if x not in new_cust_data]
 
-                # if there is a new customer added, then add to intersection and everything
-                for customerid in Customers:
-                    pass
-                pass
+                    # delete the removed customers from the intersection table
+                    for cust in removed_customers:
+                        del_query = "DELETE FROM Flights_has_Customers \
+                            WHERE Flights_FlightID = '%s' AND Customers_CustomerID = '%s';" % (id, cust)
+                        cursor = db.execute_query(db_connection=db_connection, query=del_query)
 
-                # if they removed customers, then update the tables
+                # if they added customers, then insert to intersection table
+                elif len(new_cust_data) > len(prev_cust_data):
+                    new_cust_set = set(new_cust_data)
+                    added_customers = [x for x in new_cust_set if x not in prev_cust_data]
+
+                    for cust in added_customers:
+                        add_query = "INSERT INTO Flights_has_Customers \
+                            (Flights_FlightID, Customers_CustomerID) \
+                            VALUES (%s, %s);"
+                        cursor = db.execute_query(db_connection=db_connection, query=add_query, query_params=(id, cust))
                 
-            
             return redirect("/flights")
-
-            # From the create step
-            # if Customers:
-            #     for customerid in Customers:
-            #         # Add to flights_has_customers table
-            #         query = "INSERT INTO Flights_has_Customers \
-            #             (Flights_FlightID, Customers_CustomerID) \
-            #             VALUES (%s, %s);"
-            #         cursor = db.execute_query(
-            #             db_connection=db_connection,
-            #             query=query,
-            #             query_params=(flightid, customerid)
-            #         )
-            # return redirect("/flights")
 
 
 @app.route("/pilots", methods=["POST", "GET"])
